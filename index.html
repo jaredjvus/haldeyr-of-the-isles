@@ -2874,8 +2874,8 @@ body.dm-mode .rage-btn { pointer-events: none; opacity: 0.6; cursor: default; }
 .gear-list { display: flex; flex-direction: column; gap: 0.4rem; }
 .gear-row {
   display: grid;
-  grid-template-columns: 175px 1fr auto;
-  gap: 0.8rem;
+  grid-template-columns: 110px 1fr auto;
+  gap: 0.7rem;
   align-items: center;
   padding: 0.5rem 0.6rem;
   background: rgba(74, 138, 115, 0.04);
@@ -2885,13 +2885,13 @@ body.dm-mode .rage-btn { pointer-events: none; opacity: 0.6; cursor: default; }
   color: var(--parchment);
 }
 .gear-row.equipped { background: rgba(74, 138, 115, 0.10); border-color: var(--gold); }
-.gear-toggles { display: flex; flex-direction: column; gap: 0.25rem; align-items: stretch; }
+.gear-toggles { display: flex; flex-direction: column; gap: 0.2rem; align-items: stretch; }
 .gear-toggle {
   font-family: 'Cinzel', serif;
-  font-size: 0.62rem;
+  font-size: 0.55rem;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  padding: 0.35rem 0.55rem;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.4rem;
   background: transparent;
   border: 1px solid var(--gold-tarnish);
   color: var(--parchment-aged);
@@ -2899,6 +2899,7 @@ body.dm-mode .rage-btn { pointer-events: none; opacity: 0.6; cursor: default; }
   cursor: pointer;
   text-align: center;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
+  line-height: 1.2;
 }
 .gear-toggle:hover { color: var(--gold); border-color: var(--gold); }
 .gear-toggle.on {
@@ -3814,7 +3815,7 @@ body.dm-mode .dm-hide { display: none; }
     <details class="card collapsible-card" id="gear-card" open>
       <summary>
         <h3>Gear
-          <span id="gear-attunement-counter" style="margin-left:0.8rem;font-family:'Cinzel',serif;font-size:0.65rem;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:var(--silver-crack);vertical-align:middle;"></span>
+          <span id="gear-attunement-counter" style="margin-left:0.8rem;margin-right:2rem;font-family:'Cinzel',serif;font-size:0.65rem;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:var(--silver-crack);vertical-align:middle;"></span>
           <button class="header-action" id="gear-add-btn">+ Add Gear</button>
         </h3>
       </summary>
@@ -8913,17 +8914,19 @@ function renderGear() {
     if (g.speedBonus) effects.push(`+${g.speedBonus} ft Speed`);
     if (g.statOverride) effects.push(...Object.entries(g.statOverride).map(([k, v]) => `${k.toUpperCase()} → ${v}`));
     const chargesHtml = g.chargesMax ? `<div class="gear-meta">Charges: ${g.chargesMax - (g.chargesUsed || 0)} / ${g.chargesMax}</div>` : '';
-    // Equip pill — only shown for items where it matters (armor / shield / weapon / things with magic effects).
-    const wantEquipPill = ['armor', 'shield', 'weapon'].includes(g.type)
-                       || g.acBonus || g.saveBonus || g.attackBonus || g.damageBonus
-                       || g.hpBonus || g.speedBonus || g.statOverride;
-    const equipPill = wantEquipPill
-      ? `<button class="gear-toggle equip ${g.equipped ? 'on' : ''}">${g.equipped ? '✓ Equipped' : 'Equip'}</button>`
-      : `<button class="gear-toggle spacer" tabindex="-1">·</button>`;
+    // Equip pill — shown for every item. For armor/shield/weapon/magic-effect items
+    // it drives mechanical stats; for misc items it's just a 'worn/carried' marker.
+    const mechanical = ['armor', 'shield', 'weapon'].includes(g.type)
+                    || g.acBonus || g.saveBonus || g.attackBonus || g.damageBonus
+                    || g.hpBonus || g.speedBonus || g.statOverride;
+    const equipLabel = mechanical
+      ? (g.equipped ? '✓ Equipped' : 'Equip')
+      : (g.equipped ? '✓ Worn' : 'Wear');
+    const equipPill = `<button class="gear-toggle equip ${g.equipped ? 'on' : ''}" title="${mechanical ? 'Equip to apply this item\'s mechanical effects (AC, attacks, etc.)' : 'Mark as currently worn / carried (no mechanical effect for misc items)'}">${equipLabel}</button>`;
     // Attune pill — only shown for items that require attunement.
     const attunePill = g.requiresAttunement
-      ? `<button class="gear-toggle attune ${g.attuned ? 'on' : ''}">${g.attuned ? '✦ Attuned' : 'Attune'}</button>`
-      : `<button class="gear-toggle spacer" tabindex="-1">·</button>`;
+      ? `<button class="gear-toggle attune ${g.attuned ? 'on' : ''}" title="Attune (3 max — magic effects only apply when attuned)">${g.attuned ? '✦ Attuned' : 'Attune'}</button>`
+      : '';
     row.innerHTML = `
       <div class="gear-toggles">${equipPill}${attunePill}</div>
       <div class="gear-main">
