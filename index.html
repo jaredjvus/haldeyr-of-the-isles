@@ -5740,16 +5740,164 @@ function renderCombatResources(level) {
   inspBtn.textContent = state.heroicInspiration ? 'Available' : 'None';
   inspBtn.classList.toggle('used', !state.heroicInspiration);
 
-  const { a, r, b, w } = classBreakdown(level);
+  const { a, r, b, w, p } = classBreakdown(level);
   const stats = computeStats(level);
   const intMod = mod(stats.int);
   const dynRows = document.getElementById('combat-resources-dynamic');
   dynRows.innerHTML = '';
 
   const pb = profBonus(level);
+  // Gate the Goliath block on a history entry actually setting giantAncestry —
+  // otherwise Haldeyr (Half-Elf) and other species default to the DEFAULT_STATE
+  // 'Fire' value and would render a stray Goliath pip row.
+  const hasGoliathHistory = (state.levelHistory || []).some(e => e.giantAncestry);
+
+  // ============================================================
+  // PALADIN game-time resources (Haldeyr)
+  // ============================================================
+  if (p >= 1) {
+    const palData = CLASS_DATA.paladin.perLevel[p];
+    const chaMod = mod(stats.cha);
+
+    // Lay on Hands pool (5 × paladin level HP)
+    const loHMax = p * 5;
+    const loHUsed = Math.min(state.layOnHandsUsed || 0, loHMax);
+    const loHRemaining = loHMax - loHUsed;
+    const restoringTouch = p >= 14;
+    const lohRow = document.createElement('div');
+    lohRow.className = 'resource-row';
+    const lohTip = `Pool of healing power: ${loHMax} HP. Bonus Action to heal a creature (any number from the pool). Expend 5 HP from the pool to remove Poisoned condition.${restoringTouch ? ' At Paladin 14+ (Restoring Touch), you may also expend 5 HP per condition to remove: Blinded, Charmed, Deafened, Frightened, Paralyzed, Stunned.' : ''} Refills on Long Rest.`;
+    lohRow.innerHTML = `
+      <span class="resource-label has-tip" title="${lohTip.replace(/"/g, '&quot;')}">Lay on Hands <span class="resource-meta">${loHRemaining} / ${loHMax} HP</span></span>
+      <button class="rage-btn" id="lay-on-hands-btn"${loHRemaining === 0 ? ' disabled' : ''}>Spend</button>
+    `;
+    lohRow.querySelector('#lay-on-hands-btn').addEventListener('click', () => promptLayOnHands(loHRemaining, restoringTouch));
+    dynRows.appendChild(lohRow);
+
+    // Channel Divinity pips (2 at L3, 3 at L11; SR refunds 1, LR refills all)
+    if (palData.channelDivinity > 0) {
+      const cdMax = palData.channelDivinity;
+      const cdUsed = Math.min(state.channelDivinityUsed || 0, cdMax);
+      const oathName = state.sacredOath || '(pick at L3)';
+      const cdOptions = (CLASS_DATA.paladin.subclassData[state.sacredOath] || {}).channelDivinity || [];
+      const cdOptionLine = cdOptions.length > 0
+        ? cdOptions.map(o => `<strong>${o.name}</strong> (${o.action}): ${o.desc}`).join('\n\n')
+        : 'Divine Sense (Bonus Action, 10-min, 60 ft Celestials/Fiends/Undead detect). Oath-specific options unlock at L3.';
+      const cdTip = `Channel Divinity: ${cdMax} uses, regain 1 on Short Rest, all on Long Rest. Save DC = your spell save DC.\n\nBase option (always available): Divine Sense — Bonus Action; detect Celestials/Fiends/Undead within 60 ft for 10 min.\n\n${state.sacredOath ? state.sacredOath + ' options:\n\n' + cdOptionLine : 'Pick a Sacred Oath at L3 to unlock more options.'}`;
+      const cdRow = document.createElement('div');
+      cdRow.className = 'resource-row';
+      cdRow.innerHTML = `
+        <span class="resource-label has-tip" title="${cdTip.replace(/"/g, '&quot;')}">Channel Divinity <span class="resource-meta">${oathName} · SR/LR</span></span>
+        <div class="resource-pips" data-resource="channel-divinity"></div>
+      `;
+      const cdPipsBox = cdRow.querySelector('.resource-pips');
+      for (let i = 0; i < cdMax; i++) {
+        const pip = document.createElement('div');
+        pip.className = 'pip' + (i >= cdMax - cdUsed ? ' used' : '');
+        pip.title = `Channel Divinity use ${i + 1}`;
+        pip.addEventListener('click', () => toggleIntModResource('channelDivinityUsed', i, cdMax));
+        cdPipsBox.appendChild(pip);
+      }
+      dynRows.appendChild(cdRow);
+    }
+
+    // Paladin spell slots — one row per slot level
+    if (palData.spellSlots) {
+      for (const slotLevelKey of Object.keys(palData.spellSlots).sort((a, b) => parseInt(a) - parseInt(b))) {
+        const slotLevel = parseInt(slotLevelKey, 10);
+        const slotMax = palData.spellSlots[slotLevel];
+        if (!slotMax) continue;
+        const slotUsed = Math.min((state.paladinSlotsUsed || {})[slotLevel] || 0, slotMax);
+        const row = document.createElement('div');
+        row.className = 'resource-row paladin-slot-row';
+        row.innerHTML = `
+          <span class="resource-label has-tip" title="${ordinalSpellLevel(slotLevel)} spell slots. Recover all on a Long Rest.">${ordinalSpellLevel(slotLevel)} Slots</span>
+          <div class="resource-pips" data-resource="paladin-slot-${slotLevel}"></div>
+        `;
+        const pipsBox = row.querySelector('.resource-pips');
+        for (let i = 0; i < slotMax; i++) {
+          const pip = document.createElement('div');
+          pip.className = 'pip' + (i >= slotMax - slotUsed ? ' used' : '');
+          pip.title = `${ordinalSpellLevel(slotLevel)} slot ${i + 1}`;
+          pip.addEventListener('click', () => togglePaladinSlot(slotLevel, i, slotMax));
+          pipsBox.appendChild(pip);
+        }
+        dynRows.appendChild(row);
+      }
+    }
+
+    // Paladin's Smite free cast (L2+, 1/LR)
+    if (p >= 2) {
+      const psRow = document.createElement('div');
+      psRow.className = 'resource-row';
+      const used = !!state.paladinsSmiteUsed;
+      psRow.innerHTML = `
+        <span class="resource-label has-tip" title="Paladin's Smite: cast Divine Smite once per Long Rest without expending a spell slot.">Paladin's Smite <span class="resource-meta">1/LR · free Divine Smite</span></span>
+        <button class="rage-btn ${used ? 'used' : ''}" id="paladins-smite-btn"${used ? ' disabled' : ''}>${used ? 'Used' : 'Cast Free'}</button>
+      `;
+      psRow.querySelector('#paladins-smite-btn').addEventListener('click', () => {
+        state.paladinsSmiteUsed = true;
+        saveState();
+        render();
+      });
+      dynRows.appendChild(psRow);
+    }
+
+    // Faithful Steed free cast (L5+, 1/LR)
+    if (p >= 5) {
+      const fsRow = document.createElement('div');
+      fsRow.className = 'resource-row';
+      const used = !!state.faithfulSteedUsed;
+      fsRow.innerHTML = `
+        <span class="resource-label has-tip" title="Faithful Steed: cast Find Steed once per Long Rest without expending a spell slot.">Faithful Steed <span class="resource-meta">1/LR · free Find Steed</span></span>
+        <button class="rage-btn ${used ? 'used' : ''}" id="faithful-steed-btn"${used ? ' disabled' : ''}>${used ? 'Used' : 'Cast Free'}</button>
+      `;
+      fsRow.querySelector('#faithful-steed-btn').addEventListener('click', () => {
+        state.faithfulSteedUsed = true;
+        saveState();
+        render();
+      });
+      dynRows.appendChild(fsRow);
+    }
+
+    // Aura of Protection (L6+, passive)
+    if (p >= 6) {
+      const auraRadius = p >= 18 ? 30 : 10;
+      const auraBonus = Math.max(1, chaMod);
+      const auraTip = `Aura of Protection: ${auraRadius}-foot Emanation. You and allies in the aura gain +${auraBonus} to saving throws (your CHA mod, min +1). Suppressed while you are Incapacitated.${p >= 10 ? ' Plus Aura of Courage: Immunity to Frightened in the aura.' : ''}`;
+      const auraRow = document.createElement('div');
+      auraRow.className = 'resource-row';
+      auraRow.innerHTML = `
+        <span class="resource-label has-tip" title="${auraTip.replace(/"/g, '&quot;')}">Aura of Protection <span class="resource-meta">${auraRadius} ft · +${auraBonus} saves${p >= 10 ? ' · Frightened immune' : ''}</span></span>
+        <span class="resource-meta" style="color:var(--gold);font-style:italic;">passive</span>
+      `;
+      dynRows.appendChild(auraRow);
+    }
+
+    // Oath capstone (L20, 1/LR or expend 5th slot)
+    if (p >= 20 && state.sacredOath) {
+      const oathData = CLASS_DATA.paladin.subclassData[state.sacredOath];
+      const capstone = oathData && oathData.perLevel && oathData.perLevel[20] && oathData.perLevel[20][0];
+      if (capstone) {
+        const used = !!state.oathCapstoneUsed;
+        const capRow = document.createElement('div');
+        capRow.className = 'resource-row';
+        capRow.innerHTML = `
+          <span class="resource-label has-tip" title="${capstone.desc.replace(/"/g, '&quot;')}">${capstone.name} <span class="resource-meta">${state.sacredOath} · 1/LR or 5th slot</span></span>
+          <button class="rage-btn ${used ? 'used' : ''}" id="oath-capstone-btn"${used ? ' disabled' : ''}>${used ? 'Used' : 'Invoke'}</button>
+        `;
+        capRow.querySelector('#oath-capstone-btn').addEventListener('click', () => {
+          state.oathCapstoneUsed = true;
+          saveState();
+          render();
+        });
+        dynRows.appendChild(capRow);
+      }
+    }
+  }
 
   // ---- Goliath ancestry uses ---- (PB/Long Rest, always available)
-  if (level >= 1) {
+  if (level >= 1 && hasGoliathHistory) {
     const ancestryName = state.giantAncestry || 'Fire';
     const ancestryData = GIANT_ANCESTRIES[ancestryName];
     if (ancestryData) {
@@ -6248,6 +6396,61 @@ function togglePactSlot(index, max) {
   render();
 }
 
+// Paladin spell slot pip toggle (per slot level)
+function togglePaladinSlot(slotLevel, index, max) {
+  state.paladinSlotsUsed = state.paladinSlotsUsed || {};
+  const used = state.paladinSlotsUsed[slotLevel] || 0;
+  const isAvailable = index < (max - used);
+  state.paladinSlotsUsed[slotLevel] = isAvailable ? (max - index) : (max - index - 1);
+  saveState();
+  render();
+}
+
+// Lay on Hands spend prompt — heal a creature OR remove conditions (L14+)
+function promptLayOnHands(remaining, restoringTouch) {
+  if (remaining <= 0) return;
+  const conditionList = ['Poisoned (5 HP from pool, always available)'];
+  if (restoringTouch) {
+    conditionList.push('Blinded (5 HP)', 'Charmed (5 HP)', 'Deafened (5 HP)', 'Frightened (5 HP)', 'Paralyzed (5 HP)', 'Stunned (5 HP)');
+  }
+  const body = `
+    <p>Bonus Action. Pool remaining: <strong>${remaining} HP</strong>.</p>
+    <div style="margin:0.8rem 0;">
+      <label style="display:block;margin-bottom:0.3rem;font-family:'Cinzel',serif;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);">Heal a creature</label>
+      <input id="loh-heal-input" type="number" min="1" max="${remaining}" value="${Math.min(remaining, 5)}" style="width:100%;padding:0.4rem;background:var(--ink);border:1px solid var(--gold-tarnish);color:var(--parchment);">
+    </div>
+    <div style="margin:0.8rem 0; font-style:italic; color:var(--parchment-aged); font-size:0.9rem;">
+      Or spend 5 HP per condition cleansed:<br>
+      ${conditionList.join('<br>')}
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.8rem;">
+      <button class="rage-btn" id="loh-heal-confirm">Heal</button>
+      <button class="rage-btn" id="loh-cleanse-confirm">Spend 5 HP (cleanse 1)</button>
+    </div>
+  `;
+  showInfo('Lay on Hands', body);
+  setTimeout(() => {
+    const healBtn = document.getElementById('loh-heal-confirm');
+    const cleanseBtn = document.getElementById('loh-cleanse-confirm');
+    if (healBtn) healBtn.addEventListener('click', () => {
+      const amt = parseInt(document.getElementById('loh-heal-input').value, 10);
+      if (isNaN(amt) || amt < 1) return;
+      const spend = Math.min(amt, remaining);
+      state.layOnHandsUsed = (state.layOnHandsUsed || 0) + spend;
+      saveState();
+      document.getElementById('confirm-overlay').hidden = true;
+      render();
+    });
+    if (cleanseBtn) cleanseBtn.addEventListener('click', () => {
+      if (remaining < 5) return;
+      state.layOnHandsUsed = (state.layOnHandsUsed || 0) + 5;
+      saveState();
+      document.getElementById('confirm-overlay').hidden = true;
+      render();
+    });
+  }, 30);
+}
+
 // Magical Cunning button (Warlock 2+) — 1/Long Rest, refunds half pact slots
 // (rounded up); Eldritch Master at L20 upgrades this to ALL slots.
 function triggerMagicalCunning() {
@@ -6450,11 +6653,14 @@ function getConditionEffects() {
 }
 
 function getBaseSpeed(level) {
-  // Goliath: 35 ft walking
-  let speed = 35;
+  // Haldeyr (Half-Elf): 30 ft walking. Goliath was 35 — kept commented for reference.
+  const hasGoliathHistory = (state.levelHistory || []).some(e => e.giantAncestry);
+  let speed = hasGoliathHistory ? 35 : 30;
   // Barbarian Fast Movement (level 5+, not wearing Heavy armor): +10 ft
-  const { b } = classBreakdown(level);
+  const { b, p } = classBreakdown(level);
   if (b >= 5) speed += 10;
+  // Aura of Alacrity (Oath of Glory, Paladin 7+): +10 ft Speed
+  if (p >= 7 && state.sacredOath === 'Oath of Glory') speed += 10;
   return speed;
 }
 
@@ -7092,7 +7298,7 @@ function weaponAbilityForRoll(weapon, stats) {
 
 function renderAttackProfilesCard(level) {
   const card = document.getElementById('attack-profiles-card');
-  const { b, w } = classBreakdown(level);
+  const { b, w, p } = classBreakdown(level);
   const stats = computeStats(level);
   const pb = profBonus(level);
   const chaMod = mod(stats.cha);
@@ -7127,6 +7333,18 @@ function renderAttackProfilesCard(level) {
   const strikeActive = hasStrikeFeatProfile && state.strikeOfTheGiantsType && strikeRemaining > 0;
   const strikeType = strikeActive ? state.strikeOfTheGiantsType : '';
   const strikeDieAndType = strikeActive ? STRIKE_DICE[strikeType] : '';
+  // Paladin Radiant Strikes (L11+): +1d8 radiant on melee/unarmed hits
+  const hasRadiantStrikes = p >= 11;
+  // Fighting Style: damage bonus from Dueling, dice-rebroll from GWF (display only — actual reroll is at table)
+  const fs = state.fightingStyle;
+  const hasDueling = fs === 'Dueling';
+  const hasGWF = fs === 'Great Weapon Fighting';
+  const hasDefense = fs === 'Defense';
+  const hasInterception = fs === 'Interception';
+  const hasProtection = fs === 'Protection';
+  const hasThrownWF = fs === 'Thrown Weapon Fighting';
+  const hasTWF = fs === 'Two-Weapon Fighting';
+  const hasBlindFighting = fs === 'Blind Fighting';
 
   // Each weapon mastery picked — auto-builds an attack profile per weapon
   for (const name of state.weaponMasteries || []) {
@@ -7154,6 +7372,15 @@ function renderAttackProfilesCard(level) {
         : `+ ${strikeDieAndType} (Strike: ${strikeType}, 1/turn)`;
       damageParts.push(strikeDamageLine);
     }
+    // Paladin Radiant Strikes (L11+) — +1d8 radiant on every melee/unarmed hit
+    const isMelee = !wpn.properties.toLowerCase().includes('ranged') && !wpn.properties.toLowerCase().includes('thrown only');
+    if (hasRadiantStrikes && isMelee) damageParts.push(`+ 1d8 radiant (Radiant Strikes)`);
+    // Fighting Style: Dueling +2 dmg if one-handed melee, no other weapons. Display the +2 if weapon is one-handed.
+    const isOneHanded = !wpn.properties.toLowerCase().includes('two-handed');
+    if (hasDueling && isOneHanded && isMelee) damageParts.push(`+ 2 (Dueling)`);
+    // Thrown Weapon Fighting +2 dmg with thrown weapons
+    const isThrowable = wpn.properties.toLowerCase().includes('thrown');
+    if (hasThrownWF && isThrowable) damageParts.push(`+ 2 (Thrown Weapon Fighting)`);
     const damageStr = damageParts.join(' ') + ' ' + (cleaverActive && wpn.name === (state.pactWeaponName || 'Greatsword') ? state.elementalCleaverType : damageType);
     const flagParts = [];
     if (isStrAttack && isRaging) flagParts.push('RAGING');
@@ -7161,6 +7388,8 @@ function renderAttackProfilesCard(level) {
     if (cleaverActive && wpn.name === (state.pactWeaponName || 'Greatsword')) flagParts.push('Cleaver');
     if (brutalActive) flagParts.push('Brutal');
     if (strikeActive) flagParts.push(`Strike: ${strikeType}`);
+    if (hasRadiantStrikes && isMelee) flagParts.push('Radiant');
+    if (hasGWF) flagParts.push('GWF (reroll 1s & 2s once)');
     // Mastery on-miss / on-hit notes that need surfacing
     const extraNote = [`${wpn.properties}`, `${MASTERY_DESCRIPTIONS[wpn.mastery] || ''}`];
     if (wpn.mastery === 'Graze') {
@@ -7232,12 +7461,28 @@ function renderAttackProfilesCard(level) {
   }
   card.hidden = false;
 
-  // Blurb: prof bonus + Extra Attack note + Reckless Attack toggle (Barb 2+)
+  // Blurb: prof bonus + Extra Attack note + Reckless Attack toggle (Barb 2+) + Paladin Smite/Aura
   const blurbParts = [`Proficiency: <strong>+${pb}</strong>`];
-  if (extraAttack) blurbParts.push(`<strong>Extra Attack</strong> (attack twice per Attack action)`);
+  const paladinExtraAttack = p >= 5;
+  if (extraAttack || paladinExtraAttack) blurbParts.push(`<strong>Extra Attack</strong> (attack twice per Attack action)`);
   if (b >= 1) blurbParts.push(isRaging
     ? `<strong style="color: var(--gold-bright);">Raging</strong> — +${rageBonus} damage on STR attacks, Resistance to B/P/S, Advantage on STR checks/saves`
     : `<em>Not raging.</em> Enter Rage in Combat Resources.`);
+  // Paladin-specific blurb
+  if (p >= 1) {
+    const spellSaveDC = 8 + pb + chaMod;
+    const spellAttack = pb + chaMod;
+    blurbParts.push(`<strong>Spell Save DC ${spellSaveDC}</strong> · Spell Attack <strong>+${spellAttack}</strong> (CHA)`);
+    if (state.fightingStyle) {
+      blurbParts.push(`<strong>Fighting Style:</strong> ${state.fightingStyle}${hasDefense ? ' (+1 AC in armor)' : ''}`);
+    }
+    blurbParts.push(`<em>Divine Smite (BA on melee hit):</em> +2d8 radiant +1d8/slot above 1st, +1d8 vs Fiend/Undead. Cast from Spells card or use Paladin's Smite for a free LR cast.`);
+    if (p >= 11) blurbParts.push(`<strong>Radiant Strikes:</strong> +1d8 radiant baked into every melee/unarmed hit.`);
+    if (p >= 6) {
+      const auraR = p >= 18 ? 30 : 10;
+      blurbParts.push(`<strong>Aura of Protection ${auraR} ft:</strong> +${Math.max(1, chaMod)} to saves for self + allies${p >= 10 ? ' · Immunity to Frightened (Aura of Courage)' : ''}`);
+    }
+  }
   document.getElementById('attack-profiles-blurb').innerHTML = blurbParts.join(' · ');
 
   const list = document.getElementById('attack-profiles-list');
@@ -10384,12 +10629,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('short-rest-btn').addEventListener('click', () => {
-  const { b, w } = classBreakdown(state.level);
+  const { b, w, p } = classBreakdown(state.level);
   const recoversRage = b >= 1 && (state.ragesUsed || 0) > 0;
   const recoversPactMagic = w >= 1 && (state.pactSlotsUsed || 0) > 0;
+  const recoversCD = p >= 3 && (state.channelDivinityUsed || 0) > 0;
   const items = [];
   if (recoversRage) items.push('Refund 1 expended Rage use');
   if (recoversPactMagic) items.push('Refill ALL expended Pact Magic spell slots');
+  if (recoversCD) items.push('Refund 1 expended Channel Divinity use');
   items.push('Spend Hit Dice manually after — a short rest doesn\'t auto-heal');
   const body = `
     <p>This will:</p>
@@ -10398,6 +10645,7 @@ document.getElementById('short-rest-btn').addEventListener('click', () => {
   showConfirm('Take a Short Rest?', body, () => {
     if (recoversRage) state.ragesUsed = Math.max(0, state.ragesUsed - 1);
     if (recoversPactMagic) state.pactSlotsUsed = 0;
+    if (recoversCD) state.channelDivinityUsed = Math.max(0, state.channelDivinityUsed - 1);
     state.relentlessRageDC = 10; // Relentless Rage DC resets on Short or Long Rest
     saveState();
     render();
