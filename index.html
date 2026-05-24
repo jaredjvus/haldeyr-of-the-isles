@@ -3360,7 +3360,7 @@ body.dm-mode .dm-hide { display: none; }
       <span class="pb-status" id="pb-status">empty pool — set his scores</span>
     </div>
     <p style="text-align:center; font-style:italic; color:var(--parchment-aged); font-size:0.9rem; margin-top: 0.5rem;">
-      Background bonuses (Giant Foundling): <strong>+2 STR</strong>, <strong>+1 CON</strong>. Edit the inputs above to set his point-buy scores.
+      Background bonuses (Sage): the player distributes <strong>+2 / +1</strong> (or <strong>+1 / +1 / +1</strong>) across CON, INT, and WIS, then layers Half-Elf species bonuses (<strong>+2 CHA</strong> + two free +1s). Set scores in the Level-Up modal.
     </p>
 
     <div class="conditions-row">
@@ -3420,30 +3420,30 @@ body.dm-mode .dm-hide { display: none; }
     <div class="two-col">
       <details class="card collapsible-card" open>
         <summary>
-        <h3>The Cinder-Bound</h3>
+        <h3>Of the Isles</h3>
         </summary>
         <div class="collapsible-body">
         <ul>
-          <li><strong>Name</strong><br>Kano (he/him). Goliath of Fire Giant ancestry.</li>
-          <li><strong>Born</strong><br>The Hotenow Cinder-Guild's illegal deep-earth tunnels beneath the volcano. Childhood measured in wheelbarrows of obsidian and coal.</li>
-          <li><strong>Age</strong><br>19. Three years a freedman. Bound to the Efreeti since the geode incident at sixteen.</li>
-          <li><strong>Form</strong><br>Ash-gray flesh, broad-shouldered. Eyes glow like fresh coals when his blood quickens.</li>
-          <li><strong>Heat</strong><br>Body runs furnace-warm even at rest — a natural radiator. Once kept a dying lady's bones from the sea-cliff cold.</li>
-          <li><strong>Voice</strong><br>Rough and halting in Common; learned to read at Emmeline's bedside. When the Rage takes him, a second voice rumbles beneath his — older, prouder, made of fire.</li>
+          <li><strong>Name</strong><br>Haldeyr (he/him). Half-Elf — neither fully of the elven courts nor of the human seafaring villages.</li>
+          <li><strong>Born</strong><br>The salt-bleached islands of the Sword Coast — backstory to be filled in with the player.</li>
+          <li><strong>Age</strong><br>(player fills in)</li>
+          <li><strong>Form</strong><br>(player fills in — physical description)</li>
+          <li><strong>Voice</strong><br>(player fills in — manner of speaking)</li>
+          <li><strong>Mark</strong><br>(player fills in — distinguishing feature)</li>
         </ul>
         </div>
       </details>
       <details class="card collapsible-card" open>
         <summary>
-        <h3>The Two Inside Him</h3>
+        <h3>Vows &amp; Lineage</h3>
         </summary>
         <div class="collapsible-body">
         <ul>
-          <li><strong>Background</strong><br>Giant Foundling. Bound by chains, raised in heat, finally treated as a person by the woman who bought him.</li>
-          <li><strong>Alignment</strong><br>Chaotic Good. He owes Emmeline a kindness he can never repay. He owes the bosses of the Cinder-Guild something else.</li>
-          <li><strong>Patron</strong><br>An imprisoned Efreeti noble bound within him since the cave-in. It demands glory, power, and ash. It does not possess — it <em>burns alongside</em>.</li>
-          <li><strong>Gear</strong><br>A dark-iron greatsword bought with seventy-five gold from a dead lady's will. Sturdy armor over ash-gray flesh.</li>
-          <li><strong>Carry</strong><br>The soft memory of Lady Emmeline, who taught him his strength could be a hearth and not just a weapon.</li>
+          <li><strong>Background</strong><br>Sage. The scholar who left the lamplit reading-rooms to walk the salt-wind and bring what he learned to those who need it.</li>
+          <li><strong>Alignment</strong><br>Lawful Good (or per player choice).</li>
+          <li><strong>Oath</strong><br>(picked at Paladin level 3 — Devotion, Glory, the Ancients, Vengeance, Conquest, Redemption, the Crown, the Watchers, or Oathbreaker.)</li>
+          <li><strong>Faith</strong><br>(player fills in — patron deity or sworn philosophy)</li>
+          <li><strong>Carry</strong><br>(player fills in — talisman, oath-token, or sworn keepsake)</li>
         </ul>
         </div>
       </details>
@@ -3462,7 +3462,7 @@ body.dm-mode .dm-hide { display: none; }
         <div class="skills-grid" style="grid-template-columns: 1fr;" id="saves-grid">
           <!-- filled by JS -->
         </div>
-        <p style="margin-top: 1rem; font-style: italic; font-size: 0.9rem;" id="saves-note">Save proficiencies appear once Kano takes his first class level.</p>
+        <p style="margin-top: 1rem; font-style: italic; font-size: 0.9rem;" id="saves-note">Save proficiencies appear once Haldeyr takes his first class level.</p>
         </div>
       </details>
       <details class="card collapsible-card" open>
@@ -3578,29 +3578,33 @@ body.dm-mode .dm-hide { display: none; }
     <div class="two-col">
       <details class="card collapsible-card" open>
         <summary>
-        <h3>Goliath
-          <select id="giant-ancestry-select" class="ancestry-select" title="Switch Giant Ancestry">
-            <option value="Fire">Fire Giant Ancestry</option>
-            <option value="Stone">Stone Giant Ancestry</option>
-            <option value="Cloud">Cloud Giant Ancestry</option>
-            <option value="Frost">Frost Giant Ancestry</option>
-            <option value="Hill">Hill Giant Ancestry</option>
-            <option value="Storm">Storm Giant Ancestry</option>
-          </select>
-        </h3>
+        <h3>Half-Elf <span style="font-family:'EB Garamond',serif; font-style:italic; font-size:0.85rem; color:var(--parchment-aged); margin-left:0.4rem;">(2014 species)</span></h3>
         </summary>
         <div class="collapsible-body">
         <div id="species-features">
           <div class="feature-block">
-            <h4>Large Form</h4>
-            <p>Starting at character level 5, you can change your size to Large as a Bonus Action for 10 minutes if you have room. You have Advantage on Strength checks and your Speed increases by 10 feet. Usable Proficiency Bonus times per Long Rest.</p>
+            <h4>Ability Score Increases</h4>
+            <p><strong>+2 Charisma</strong>, plus <strong>+1 to two other ability scores</strong> of your choice (the player picks these in the Level-Up modal at character level 1).</p>
           </div>
           <div class="feature-block">
-            <h4>Powerful Build</h4>
-            <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p>
+            <h4>Darkvision (60 ft)</h4>
+            <p>Thanks to your elven blood, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p>
           </div>
-          <div class="feature-block" id="giant-ancestry-feature">
-            <!-- filled by render: Fire's Burn or Stone's Endurance -->
+          <div class="feature-block">
+            <h4>Fey Ancestry</h4>
+            <p>You have <strong>Advantage on saving throws against being Charmed</strong>, and magic can't put you to sleep.</p>
+          </div>
+          <div class="feature-block">
+            <h4>Skill Versatility</h4>
+            <p>You gain proficiency in <strong>two skills of your choice</strong> (picked in the Level-Up modal at character level 1).</p>
+          </div>
+          <div class="feature-block">
+            <h4>Languages</h4>
+            <p>You can speak, read, and write <strong>Common, Elvish, and one extra language</strong> of your choice (picked in the Level-Up modal).</p>
+          </div>
+          <div class="feature-block">
+            <h4>Size &amp; Speed</h4>
+            <p>Medium · Walking Speed <strong>30 feet</strong>.</p>
           </div>
         </div>
         </div>
@@ -3611,7 +3615,7 @@ body.dm-mode .dm-hide { display: none; }
         </summary>
         <div class="collapsible-body">
         <div id="class-features">
-          <p style="color: var(--parchment-dim); font-style: italic;">Class features appear here as Kano levels up. Use the level-up modal to add his first level.</p>
+          <p style="color: var(--parchment-dim); font-style: italic;">Class features appear here as Haldeyr levels up. Use the level-up modal to add his first level.</p>
         </div>
         </div>
       </details>
@@ -3638,7 +3642,7 @@ body.dm-mode .dm-hide { display: none; }
 
   <!-- INVENTORY -->
   <details class="section" open>
-    <summary><h2 class="section-title">Salvaged</h2></summary>
+    <summary><h2 class="section-title">Carry &amp; Kit</h2></summary>
     <div class="two-col">
       <details class="card collapsible-card" open>
         <summary>
@@ -3650,7 +3654,7 @@ body.dm-mode .dm-hide { display: none; }
       </details>
       <details class="card collapsible-card" open>
         <summary>
-        <h3>Stored on Her Chassis <button class="header-action" data-add="person">+ Add Item</button></h3>
+        <h3>On His Person <button class="header-action" data-add="person">+ Add Item</button></h3>
         </summary>
         <div class="collapsible-body">
         <ul class="inventory-list" id="inv-person"></ul>
@@ -3713,40 +3717,28 @@ body.dm-mode .dm-hide { display: none; }
     <details class="backstory-details">
       <summary>Show / Hide Backstory</summary>
       <div class="backstory-content">
-        <h3>Kano, the Cinder-Bound</h3>
-        <p class="backstory-subtitle">A sleeping volcano walks the streets of Neverwinter</p>
+        <h3>Haldeyr of the Isles</h3>
+        <p class="backstory-subtitle">Oath-bound under the salt and stars</p>
 
-        <p>To the mining bosses of the Hotenow Cinder-Guild, Kano was never a child; he was simply equipment that breathed. Born into the choked, sulfur-heavy dark of the illegal deep-earth tunnels beneath the volcano, his life was measured in wheelbarrows of obsidian and coal. Because of his size, even as a youth, Kano was forced into the "Devil's Throats" — the narrow, blistering vents where the air was thick enough to melt the lungs of human slaves. But he did not melt. While the skin of others blistered and cracked, his ash-gray flesh merely grew warm. The heat did not conquer him; it felt like a heavy, familiar blanket.</p>
+        <p style="font-style:italic; color:var(--parchment-aged);">The player will fill in Haldeyr's backstory here. Use the prompts below as scaffolding or write something entirely your own — both work.</p>
 
-        <p>The bosses realized his resilience and pushed him deeper, demanding he harvest the rare magmatic veins where the mountain itself screamed. It was there, during his sixteenth year, that the earth broke. A sudden, violent tremor shattered the rock face. Tons of boiling shale cascaded down, burying his crew and pinning Kano against a pulsing geode of raw, superheated plasma. He should have turned to ash. Instead, as the magma pooled around his chest, something ancient and terrible awoke in his blood. His Goliath heritage — the dormant spark of the ancient Fire Giants — flared to life, drinking in the heat.</p>
+        <h4 style="margin-top:1.5rem; color:var(--gold);">Suggested prompts</h4>
 
-        <p>Through the roaring fire, a second presence made itself known. Bound within the geological prison of the geode was a noble mind of the Elemental Plane of Fire — an Efreeti of boundless pride and suffocating power. In their mutual entrapment, their spirits collided. The entity did not possess Kano; rather, it anchored itself to the roaring furnace of his lineage. When the rescue crews finally cleared the rubble days later, they did not find a corpse. They found Kano standing amidst the cooling lava, his eyes glowing like fresh coals, a low, rumbling voice that was not his own echoing from his chest. When an overseer raised his whip to drive him back to work, his control snapped. His first Rage was a storm of fire and crushing strength. He tore the heavy iron grates from the walls and shattered the primary support beams.</p>
+        <p><strong>Origin.</strong> Where on the Sword Coast's islands was Haldeyr born? A fishing hamlet on the Whalebones? A lighthouse on Mintarn? A monastic library carried by ship from island to island? Half-elven children of the Isles often grow up between worlds — neither fully accepted by the elven enclaves nor fully part of the human fishing villages.</p>
 
-        <p>The Guild was furious, seeing Kano as nothing more than a volatile, walking liability that threatened to expose their illegal slave operation to the authorities of Neverwinter. Terrified of what he had become, they drugged his water, bound him in cold-iron chains that bit deep into his skin, and smuggled him out of the mountains under the dead of night. He was liquidated quickly through Neverwinter's clandestine black market, sold off to the highest bidder to ensure he would never speak of the mines.</p>
+        <p><strong>The Sage Path.</strong> Sage is the chosen background. What was Haldeyr's field of study before he took up the sword? Sea-charts and tides? Old elvish liturgy? Cataloging the leavings of drowned cities? Something he learned that he can no longer un-know?</p>
 
-        <div class="scene-break">· · ·</div>
+        <p><strong>The Oath.</strong> What pulled him from the reading-room to the road? A wreck no one survived but him? A vision in a tide-pool? A scholar's promise made to someone on their deathbed? The oath he will swear at level 3 grows out of this moment.</p>
 
-        <p>He expected a fighting pit or a cruel lord's execution block, but in a serendipitous twist of fate, he was purchased as a bed slave by the aging Lady Emmeline, a wealthy, eccentric elderly widow who lived alone in a sprawling, drafty manor atop the fog-swept cliffs of the Sea District. With her joints crippled by severe arthritis, and the damp, salty wind of the Trackless Sea making her nights an agony of shivering cold, she purchased Kano not for his skills as a laborer, but as a hearth. Because Kano's body naturally radiated a constant, furnace-like heat, his sole duty each night was to warm the furs of her bed and lie quietly beside her, acting as a living radiator to keep her warm.</p>
+        <p><strong>The Carry.</strong> What does he keep on his person from the life before? A book? A piece of driftwood? A signet? A scrap of vellum with a name written on it in a hand he isn't sure is his own?</p>
 
-        <p>For the first time in his life, Kano was treated as a human being. Emmeline did not chain him. She spoke to him with a soft, melodic gentleness that slowly quieted the furious, booming voice of the Efreeti in his mind. She taught him to read the common script, fed him fresh meats and sweet fruits he had never hoped to taste in the dark of the mines, and allowed him his dignity. She taught him about the giant-kin of old and listened to his rough, halting voice as he questioned her with genuine interest. In her quiet sanctuary, Kano learned that his strength did not have to be a weapon of pure destruction — it could be a shield, a comfort, a source of light.</p>
-
-        <p>For three years, Kano kept the cold at bay for Lady Emmeline. But even the warmest hearth cannot stop the fading of a winter leaf. Two months ago, Emmeline passed away peacefully in her sleep, her hand resting against his arm, warm until her very last breath. Her passing threw the estate into chaos, as greedy distant relatives descended upon the manor like gulls over a carcass, looking at him with disgust and preparing to throw him back into chains.</p>
-
-        <div class="scene-break">· · ·</div>
-
-        <p>But Emmeline had anticipated them. During the reading of her testament, the family attorney revealed an ironclad clause:</p>
-
-        <p style="margin-left:2rem; font-style:italic; color:var(--gold);">"To Kano, who kept the frost from my bones when the world grew cold, I bequeath his immediate and absolute legal freedom. Furthermore, the executors of my estate shall pay him a sum of seventy-five gold pieces from my personal treasury, so that he might clothe and arm himself to walk whatever path he chooses next."</p>
-
-        <p>The relatives screamed, but the law of Neverwinter held. Kano took the gold, walked out of the estate, and never looked back. He marched straight to the city's great markets to buy a set of sturdy armor to protect him from the world, and a massive greatsword forged of dark iron — a blade heavy enough to channel the crushing strength of a giant.</p>
-
-        <p>Now, Kano walks the streets of Neverwinter as a free man. He is a stranger to this sunlight, carrying the soft memory of a lady's kindness in his heart, and a sleeping volcano in his veins. The Efreeti within him stirs, demanding glory, power, and ash. The mining guilds still crawl through the dark of Mount Hotenow, unaware that their best tool is now unbound, seeking vengeance. Kano does not know where his path leads, but he knows this: <strong>the fire is his to command now, and he will burn bright.</strong></p>
+        <p style="margin-top:1.5rem; font-style:italic; color:var(--parchment-aged); border-top:1px solid var(--gold-tarnish); padding-top:1rem;">Replace this section with Haldeyr's real story once it's written. The other character sheets in this group all have full narratives — yours can wait until you know who Haldeyr is at the table.</p>
       </div>
     </details>
   </details>
 
   <footer class="footer">
-    Neverwinter, the year of the freed cinder. A volcano walks its streets.
+    The Sword Coast, the year a half-elf scholar took oath under the salt and stars.
   </footer>
 
 </div>
@@ -5127,14 +5119,15 @@ const SKILL_LIST = [
 
 const DEFAULT_INVENTORY = {
   armament: [
-    'Dark-Iron Greatsword · 2d6 slashing, Heavy, Two-Handed. Mastery: Graze. Bought at the Neverwinter market with Emmeline\'s seventy-five gold.',
-    'Hide Armor · AC 12 + DEX mod (max +2). Medium armor; sturdy and serviceable.',
-    'Javelins ×4 · 1d6 piercing, Thrown 30/120 ft. Mastery: Slow.'
+    'Longsword · 1d8 slashing (1d10 versatile). Mastery: Sap. Standard Paladin starter weapon (Chain Mail bundle).',
+    'Chain Mail · AC 16, Disadvantage on Stealth, STR 13 required. Standard Paladin starter armor.',
+    'Shield · +2 AC.',
+    'Javelins ×6 · 1d6 piercing, Thrown 30/120 ft. Mastery: Slow.'
   ],
   person: [
-    'Cold-Iron Shackle Fragments · pieces of the chains the Cinder-Guild bound him in. Kept as a reminder.',
-    'Lady Emmeline\'s Last Letter · the testament clause granting his freedom, signed by the Neverwinter attorney.',
-    'Pressed Sea-Flower · from the cliff garden of Emmeline\'s manor. Dry, faded, kept folded between the letter\'s pages.',
+    'Holy Symbol · Spellcasting Focus for Paladin spells.',
+    'Priest\'s Pack · backpack, blanket, 10 candles, tinderbox, alms box, 2 blocks of incense, censer, vestments, 2 days rations, waterskin.',
+    'Calligrapher\'s Supplies · ink, quills, parchment, charcoal sticks, ruler, blotting paper (Sage background).',
     'Explorer\'s Pack · backpack, bedroll, mess kit, tinderbox, 10 torches, 10 days rations, waterskin, 50 ft hempen rope.'
   ]
 };
@@ -5612,7 +5605,7 @@ function render() {
     savesGrid.appendChild(row);
   }
   const savesNote = document.getElementById('saves-note');
-  if (savesNote) savesNote.textContent = 'Save proficiencies appear once Kano takes his first class level.';
+  if (savesNote) savesNote.textContent = 'Save proficiencies appear once Haldeyr takes his first class level.';
 
   // Skills (proficiencies + expertise come from state.skillProfs / state.skillExpertise)
   const skillsGrid = document.getElementById('skills-grid');
