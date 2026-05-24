@@ -3823,17 +3823,8 @@ body.dm-mode .dm-hide { display: none; }
         <div id="gear-list" class="gear-list"></div>
       </div>
     </details>
-    <details class="card collapsible-card" id="magic-items-card" style="margin-top: 2rem;" open>
-      <summary>
-      <h3>Magic Items
-        <button class="edit-prepared-btn" id="add-magic-item-btn">+ Add Item</button>
-      </h3>
-      </summary>
-      <div class="collapsible-body">
-        <p class="magic-items-summary" id="magic-items-summary"></p>
-        <div id="magic-items-list"></div>
-      </div>
-    </details>
+    <!-- Legacy Magic Items card was removed — Gear card now handles armor, weapons, magic items, and attunement all in one place. -->
+
     <details class="card collapsible-card" style="margin-top: 2rem;" open>
       <summary>
       <h3>Coin &amp; Field Log</h3>
@@ -3989,55 +3980,7 @@ body.dm-mode .dm-hide { display: none; }
   </div>
 </div>
 
-<!-- Add/Edit Magic Item modal (Phase 2L) — for found / awarded magic items -->
-<div class="modal-overlay" id="magic-item-overlay" hidden>
-  <div class="modal">
-    <button class="modal-close" id="magic-item-close" aria-label="Close">×</button>
-    <div class="modal-title" id="magic-item-title">Add Magic Item</div>
-    <div class="modal-subtitle">Track found / awarded magic items, attunement, and charges.</div>
-    <div class="modal-detail-prompts">
-      <div class="modal-prompt">
-        <div class="magic-item-form">
-          <label class="mi-field mi-field-full">
-            <span class="mi-label">Name</span>
-            <input type="text" id="mi-name" placeholder="e.g., Cloak of Protection">
-          </label>
-          <label class="mi-field">
-            <span class="mi-label">Type</span>
-            <input type="text" id="mi-type" placeholder="Wondrous Item, Weapon, etc.">
-          </label>
-          <label class="mi-field">
-            <span class="mi-label">Rarity</span>
-            <select id="mi-rarity">
-              <option value="Common">Common</option>
-              <option value="Uncommon" selected>Uncommon</option>
-              <option value="Rare">Rare</option>
-              <option value="Very Rare">Very Rare</option>
-              <option value="Legendary">Legendary</option>
-              <option value="Artifact">Artifact</option>
-            </select>
-          </label>
-          <label class="mi-field mi-field-inline">
-            <input type="checkbox" id="mi-attunement">
-            <span class="mi-label">Requires Attunement</span>
-          </label>
-          <label class="mi-field">
-            <span class="mi-label">Charges (max)</span>
-            <input type="number" id="mi-charges-max" min="0" max="50" value="0">
-          </label>
-          <label class="mi-field mi-field-full">
-            <span class="mi-label">Notes</span>
-            <textarea id="mi-notes" rows="3" placeholder="Effect, recharge condition, anything you want to remember."></textarea>
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-cancel" id="magic-item-delete" hidden>Delete</button>
-      <button class="modal-confirm" id="magic-item-save">Save</button>
-    </div>
-  </div>
-</div>
+<!-- Legacy magic-item-overlay modal removed; Gear add/edit modal handles all items now. -->
 
 <!-- Gear add/edit modal -->
 <div class="modal-overlay" id="gear-overlay" hidden>
@@ -5723,6 +5666,47 @@ const DEFAULT_STATE = {
 };
 
 let state = loadState();
+migrateLegacyMagicItemsToGear();
+
+// One-time migration: port any entries from the legacy state.magicItems array
+// into state.gear, then empty state.magicItems so they don't double-count in
+// the attunement tracker. Runs every load but is a no-op after the first time
+// (since state.magicItems is left empty after migration).
+function migrateLegacyMagicItemsToGear() {
+  const legacy = state.magicItems || [];
+  if (legacy.length === 0) return;
+  state.gear = state.gear || [];
+  for (const mi of legacy) {
+    // Map legacy free-text 'type' to a structured gear type. Best-effort.
+    const rawType = (mi.type || '').toLowerCase();
+    let gearType = 'wondrous';
+    if (/weapon|sword|axe|hammer|bow|crossbow|spear|polearm|glaive|halberd/.test(rawType)) gearType = 'weapon';
+    else if (/armor/.test(rawType)) gearType = 'armor';
+    else if (/shield/.test(rawType)) gearType = 'shield';
+    else if (/cloak/.test(rawType)) gearType = 'cloak';
+    else if (/ring/.test(rawType)) gearType = 'ring';
+    else if (/boots/.test(rawType)) gearType = 'boots';
+    else if (/wand/.test(rawType)) gearType = 'wand';
+    else if (/rod/.test(rawType)) gearType = 'rod';
+    else if (/amulet/.test(rawType)) gearType = 'amulet';
+    state.gear.push({
+      id: mi.id || ('gear-mig-' + Date.now() + '-' + Math.floor(Math.random() * 99999)),
+      name: mi.name || 'Migrated Magic Item',
+      type: gearType,
+      quantity: 1,
+      weight: 0,
+      rarity: mi.rarity || 'Uncommon',
+      requiresAttunement: !!mi.attunement,
+      attuned: !!mi.attuned,
+      equipped: false,
+      chargesMax: mi.chargesMax || 0,
+      chargesUsed: mi.chargesUsed || 0,
+      notes: (mi.notes || '') + '\n\n[Auto-migrated from legacy Magic Items. Click Edit to add mechanical effect fields (AC, saves, attack, damage, etc.) if this item should drive sheet stats.]'
+    });
+  }
+  state.magicItems = [];
+  saveState();
+}
 
 function loadState() {
   try {
@@ -6159,8 +6143,7 @@ function render() {
   renderAttackProfilesCard(level);
   // Phase 2K: Cunning Strikes card
   renderCunningStrikesCard(level);
-  // Phase 2L: Magic Items card (found loot)
-  renderMagicItemsCard(level);
+  // renderMagicItemsCard call removed — the Gear card supersedes it.
 
   // Point-buy tracker
   renderPointBuy();
@@ -11415,16 +11398,21 @@ function deleteMagicItem() {
   }, { okLabel: 'Delete' });
 }
 
-document.getElementById('add-magic-item-btn').addEventListener('click', (e) => {
-  e.preventDefault(); // also handled by summary-button guard, but be explicit
-  openMagicItemModal(null);
-});
-document.getElementById('magic-item-close').addEventListener('click', closeMagicItemModal);
-document.getElementById('magic-item-save').addEventListener('click', saveMagicItem);
-document.getElementById('magic-item-delete').addEventListener('click', deleteMagicItem);
-document.getElementById('magic-item-overlay').addEventListener('click', (e) => {
-  if (e.target.id === 'magic-item-overlay') closeMagicItemModal();
-});
+// Legacy Magic Items modal listeners — null-guarded since the Magic Items card
+// and modal were removed (Gear card supersedes them). Functions kept for now
+// in case Kano/Caelen/Rivet still need them before they're ported.
+{
+  const _addMi = document.getElementById('add-magic-item-btn');
+  if (_addMi) _addMi.addEventListener('click', (e) => { e.preventDefault(); openMagicItemModal(null); });
+  const _miClose = document.getElementById('magic-item-close');
+  if (_miClose) _miClose.addEventListener('click', closeMagicItemModal);
+  const _miSave = document.getElementById('magic-item-save');
+  if (_miSave) _miSave.addEventListener('click', saveMagicItem);
+  const _miDel = document.getElementById('magic-item-delete');
+  if (_miDel) _miDel.addEventListener('click', deleteMagicItem);
+  const _miOverlay = document.getElementById('magic-item-overlay');
+  if (_miOverlay) _miOverlay.addEventListener('click', (e) => { if (e.target.id === 'magic-item-overlay') closeMagicItemModal(); });
+}
 document.getElementById('levelup-overlay').addEventListener('click', (e) => {
   if (e.target.id === 'levelup-overlay') closeLevelUpModal();
 });
