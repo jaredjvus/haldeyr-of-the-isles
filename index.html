@@ -9,21 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Unicase:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Haldeyr palette: Sea-Storm — deep teal/navy steel as the dominant ground,
-   * silver foam as the radiant accent, with parchment text. Built for a
-   * Half-Elf Paladin of the Isles: solemn, oceanic, holy. */
-  --ink: #0d2a35;            /* deep storm teal — page bg */
-  --ink-deep: #1a3a4a;       /* navy steel — card grounds */
-  --parchment: #e8e4d8;      /* worn parchment — primary text */
-  --parchment-aged: #c0baa8; /* dimmed parchment for secondary text */
-  --parchment-dim: #8a8678;  /* dim parchment for placeholders */
+  /* Haldeyr palette: Salt Mariner — weathered sailor-paladin. Wet slate and
+   * charcoal as the dominant ground, brine green as the holy accent,
+   * bronze as the warm highlight for the name. */
+  --ink: #1a1f24;            /* wet slate — page bg */
+  --ink-deep: #262d34;       /* charcoal — card grounds */
+  --parchment: #e8dec8;      /* worn rope — primary text */
+  --parchment-aged: #c0b69a; /* dimmed rope for secondary text */
+  --parchment-dim: #8a7e60;  /* dim rope for placeholders */
   --blood: #6fa0b4;          /* sea-mist blue — danger/warning secondary */
   --blood-bright: #98c0d0;   /* brighter sea-mist for hover on warnings */
-  --gold: #c0d4e0;           /* SILVER FOAM — primary accent (replaces gold) */
-  --gold-bright: #e0eef6;    /* bright foam-silver for hover */
-  --gold-tarnish: #6a8898;   /* dim steel-blue for borders/secondary */
-  --shadow: #050f14;         /* near-black storm shadow */
-  --silver-crack: #e0eef6;   /* lightning flash — bright foam highlight */
+  --gold: #4a8a73;           /* BRINE GREEN — primary accent (replaces gold) */
+  --gold-bright: #6abf8f;    /* brighter brine for hover */
+  --gold-tarnish: #2a5040;   /* deep brine for borders/secondary */
+  --shadow: #050a0d;         /* near-black storm shadow */
+  --silver-crack: #c19a4a;   /* BRONZE — warm flash on the name */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,13 +31,13 @@ html { scroll-behavior: smooth; }
 
 body {
   background: var(--ink);
-  /* Silver-foam highlights washing over storm-teal deeps, like spray on dark seas. */
+  /* Brine-green glow + bronze lantern pooling in wet-slate deeps. */
   background-image:
-    radial-gradient(ellipse at 18% 8%, rgba(192, 212, 224, 0.10), transparent 55%),
-    radial-gradient(ellipse at 82% 92%, rgba(111, 160, 180, 0.10), transparent 55%),
-    radial-gradient(ellipse at 50% 50%, rgba(5, 15, 20, 0.5), transparent 75%);
+    radial-gradient(ellipse at 18% 8%, rgba(74, 138, 115, 0.12), transparent 55%),
+    radial-gradient(ellipse at 82% 92%, rgba(193, 154, 74, 0.10), transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(5, 10, 13, 0.5), transparent 75%);
   color: var(--parchment);
-  font-family: 'IM Fell English', 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+  font-family: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
   font-size: 17px;
   line-height: 1.6;
   min-height: 100vh;
@@ -128,13 +128,13 @@ body::before {
   font-weight: 600;
   font-size: clamp(2.8rem, 7vw, 5rem);
   letter-spacing: 0.10em;
-  color: var(--parchment);
-  /* Silver-foam halo — moonlight on storm-water, with deep shadow underneath */
+  color: var(--silver-crack);
+  /* Bronze halo on wet slate — lantern light against storm-water, with deep shadow underneath */
   text-shadow:
-    0 0 4px rgba(224, 238, 246, 0.55),
-    0 0 16px rgba(192, 212, 224, 0.50),
-    0 0 40px rgba(111, 160, 180, 0.30),
-    2px 2px 0 rgba(5, 15, 20, 0.85);
+    0 0 4px rgba(193, 154, 74, 0.55),
+    0 0 16px rgba(193, 154, 74, 0.40),
+    0 0 40px rgba(74, 138, 115, 0.25),
+    2px 2px 0 rgba(5, 10, 13, 0.85);
   line-height: 1.05;
   margin-bottom: 1rem;
 }
@@ -345,7 +345,7 @@ body::before {
 }
 .modal-close:hover { color: var(--gold-bright); }
 .modal-title {
-  font-family: 'Cormorant Unicase', 'Cinzel', serif;
+  font-family: 'Cinzel', 'Cormorant Unicase', serif;
   font-size: 1.5rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1389,7 +1389,7 @@ body.dm-mode .infusion-row input { pointer-events: none; opacity: 0.5; }
 }
 
 .section-title {
-  font-family: 'Cormorant Unicase', 'Cinzel', serif;
+  font-family: 'Cinzel', 'Cormorant Unicase', serif;
   font-weight: 400;
   font-size: 1.6rem;
   letter-spacing: 0.14em;
@@ -2357,7 +2357,7 @@ body.dm-mode .rage-btn { pointer-events: none; opacity: 0.6; cursor: default; }
 }
 
 .card h3 {
-  font-family: 'Cormorant Unicase', 'Cinzel', serif;
+  font-family: 'Cinzel', 'Cormorant Unicase', serif;
   font-size: 1.25rem;
   letter-spacing: 0.16em;
   color: var(--gold);
