@@ -5359,6 +5359,7 @@ const CLASS_FEATURES = [];
 
 const BARBARIAN_SKILLS = ['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'];
 const WARLOCK_SKILLS = ['Arcana', 'Deception', 'History', 'Intimidation', 'Investigation', 'Nature', 'Religion'];
+const PALADIN_SKILLS = ['Athletics', 'Insight', 'Intimidation', 'Medicine', 'Persuasion', 'Religion'];
 
 // 2024 PHB Cunning Strike + Devious Strike effects (Rogue 5/13). Each effect
 // costs Sneak Attack dice; the player picks which to apply on a Sneak Attack
@@ -5837,6 +5838,309 @@ const CLASS_DATA = {
           { name: 'Eldritch Master', desc: 'When you use your Magical Cunning feature, you regain ALL your expended Pact Magic spell slots (instead of half).' }
         ], cantrips: 4, prepared: 15, pactSlots: { count: 4, level: 5 }, invocations: 10, mysticArcanum: [6, 7, 8, 9] }
     ]
+  },
+  paladin: {
+    name: 'Paladin',
+    fullName: 'Paladin (Sacred Oath)',
+    hitDie: 10,
+    primaryAbility: 'str',
+    saves: ['wis', 'cha'],
+    multiclassSaves: [],
+    skills: { count: 2, from: PALADIN_SKILLS, multiclassCount: 0 },
+    multiclassArmor: 'Light, Medium, Shields',
+    multiclassTools: [],
+    isHalfCaster: true,
+    spellcastingAbility: 'cha',
+    subclasses: [
+      'Oath of Devotion', 'Oath of Glory', 'Oath of the Ancients', 'Oath of Vengeance',
+      'Oath of Conquest', 'Oath of Redemption', 'Oath of the Crown', 'Oath of the Watchers', 'Oathbreaker'
+    ],
+    subclassData: {
+      'Oath of Devotion': {
+        source: 'Player\'s Handbook (2024)',
+        tenets: ['Let your word be your promise.', 'Protect the weak and never fear to act.', 'Let your honorable deeds be an example.'],
+        expandedSpells: {
+          3:  [{ name: 'Protection from Evil and Good', level: '1st' }, { name: 'Shield of Faith', level: '1st' }],
+          5:  [{ name: 'Aid', level: '2nd' }, { name: 'Zone of Truth', level: '2nd' }],
+          9:  [{ name: 'Beacon of Hope', level: '3rd' }, { name: 'Dispel Magic', level: '3rd' }],
+          13: [{ name: 'Freedom of Movement', level: '4th' }, { name: 'Guardian of Faith', level: '4th' }],
+          17: [{ name: 'Commune', level: '5th' }, { name: 'Flame Strike', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Sacred Weapon', action: 'as part of Attack action', desc: 'Imbue one Melee weapon you hold with positive energy for 10 minutes (or until you use this feature again). You add your Charisma modifier to attack rolls with it (min +1), and each hit can deal Radiant damage instead of the weapon\'s normal type. The weapon emits Bright Light 20 ft + Dim Light 20 ft. Ends early if you stop carrying the weapon.' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Sacred Weapon', desc: 'See CD card.' }, { name: 'Oath of Devotion Spells', desc: 'Always prepared per the oath spell table; do not count against prepared total.' }],
+          7:  [{ name: 'Aura of Devotion', desc: 'You and allies have Immunity to the Charmed condition while in your Aura of Protection.' }],
+          15: [{ name: 'Smite of Protection', desc: 'When you cast Divine Smite, you and your allies have Half Cover while in your Aura of Protection until the start of your next turn.' }],
+          20: [{ name: 'Holy Nimbus', desc: 'Bonus Action: imbue your Aura of Protection with holy power for 10 minutes (or until you end it). Holy Ward: Advantage on saves forced by Fiends or Undead. Radiant Damage: enemies starting their turn in the aura take CHA mod + PB Radiant damage. Sunlight: aura is filled with Bright Light that is sunlight. Once per Long Rest, or expend a 5th-level slot to restore the use.' }]
+        }
+      },
+      'Oath of Glory': {
+        source: 'Player\'s Handbook (2024)',
+        tenets: ['Endeavor to be known by your deeds.', 'Face hardships with courage.', 'Inspire others to strive for glory.'],
+        expandedSpells: {
+          3:  [{ name: 'Guiding Bolt', level: '1st' }, { name: 'Heroism', level: '1st' }],
+          5:  [{ name: 'Enhance Ability', level: '2nd' }, { name: 'Magic Weapon', level: '2nd' }],
+          9:  [{ name: 'Haste', level: '3rd' }, { name: 'Protection from Energy', level: '3rd' }],
+          13: [{ name: 'Compulsion', level: '4th' }, { name: 'Freedom of Movement', level: '4th' }],
+          17: [{ name: 'Legend Lore', level: '5th' }, { name: 'Yolande\'s Regal Presence', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Inspiring Smite', action: 'after casting Divine Smite', desc: 'Distribute 2d8 + paladin level Temp HP among creatures of your choice within 30 ft (including yourself).' },
+          { name: 'Peerless Athlete', action: 'Bonus Action', desc: 'For 1 hour: Advantage on STR (Athletics) and DEX (Acrobatics) checks; Long/High Jump distance +10 ft (extra distance costs movement).' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Inspiring Smite & Peerless Athlete', desc: 'See CD card for both options.' }, { name: 'Oath of Glory Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Aura of Alacrity', desc: 'Your Speed increases by 10 ft. Allies entering your Aura of Protection (first time on a turn / starting their turn there) gain +10 ft Speed until end of their next turn.' }],
+          15: [{ name: 'Glorious Defense', desc: 'Reaction when you or a creature within 10 ft is hit: grant +CHA mod (min +1) to AC against that attack. If it misses, you may make one weapon attack against the attacker as part of the Reaction. CHA mod uses per Long Rest (min 1).' }],
+          20: [{ name: 'Living Legend', desc: 'Bonus Action: gain benefits for 10 min. Charismatic: Advantage on all CHA checks. Saving Throw Reroll: Reaction to reroll a failed save (use the new roll). Unerring Strike: once per turn, turn a missed weapon attack into a hit. 1/LR or expend a 5th-level slot.' }]
+        }
+      },
+      'Oath of the Ancients': {
+        source: 'Player\'s Handbook (2024)',
+        tenets: ['Kindle the light of hope.', 'Shelter life.', 'Delight in art and laughter.'],
+        expandedSpells: {
+          3:  [{ name: 'Ensnaring Strike', level: '1st' }, { name: 'Speak with Animals', level: '1st' }],
+          5:  [{ name: 'Misty Step', level: '2nd' }, { name: 'Moonbeam', level: '2nd' }],
+          9:  [{ name: 'Plant Growth', level: '3rd' }, { name: 'Protection from Energy', level: '3rd' }],
+          13: [{ name: 'Ice Storm', level: '4th' }, { name: 'Stoneskin', level: '4th' }],
+          17: [{ name: 'Commune with Nature', level: '5th' }, { name: 'Tree Stride', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Nature\'s Wrath', action: 'Magic action', desc: 'Conjure spectral vines around creatures of your choice within 15 ft. Each must succeed on a STR save or be Restrained for 1 minute (save again at end of each of its turns to end the effect).' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Nature\'s Wrath', desc: 'See CD card.' }, { name: 'Oath of the Ancients Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Aura of Warding', desc: 'You and allies have Resistance to Necrotic, Psychic, and Radiant damage while in your Aura of Protection.' }],
+          15: [{ name: 'Undying Sentinel', desc: 'When reduced to 0 HP and not killed outright, drop to 1 HP instead AND regain 3× paladin level HP. 1/LR. Also: cannot be aged magically, and you cease visibly aging.' }],
+          20: [{ name: 'Elder Champion', desc: 'Bonus Action: imbue Aura of Protection with primal power for 1 minute. Diminish Defiance: enemies in aura have Disadvantage on saves against your spells & CD options. Regeneration: regain 10 HP at the start of each of your turns. Swift Spells: when you cast an Action-time spell, you may cast it as a Bonus Action instead. 1/LR or expend a 5th-level slot.' }]
+        }
+      },
+      'Oath of Vengeance': {
+        source: 'Player\'s Handbook (2024)',
+        tenets: ['Show the wicked no mercy.', 'Fight injustice and its causes.', 'Aid those harmed by injustice.'],
+        expandedSpells: {
+          3:  [{ name: 'Bane', level: '1st' }, { name: 'Hunter\'s Mark', level: '1st' }],
+          5:  [{ name: 'Hold Person', level: '2nd' }, { name: 'Misty Step', level: '2nd' }],
+          9:  [{ name: 'Haste', level: '3rd' }, { name: 'Protection from Energy', level: '3rd' }],
+          13: [{ name: 'Banishment', level: '4th' }, { name: 'Dimension Door', level: '4th' }],
+          17: [{ name: 'Hold Monster', level: '5th' }, { name: 'Scrying', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Vow of Enmity', action: 'as part of Attack action', desc: 'Utter a vow against a creature within 30 ft you can see. You have Advantage on attack rolls against it for 1 minute or until you use this feature again. If the creature drops to 0 HP before the vow ends, you may transfer it to a different creature within 30 ft (no action).' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Vow of Enmity', desc: 'See CD card.' }, { name: 'Oath of Vengeance Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Relentless Avenger', desc: 'When you hit with an Opportunity Attack, reduce the creature\'s Speed to 0 until the end of the current turn. You may then move up to half your Speed as part of the same Reaction (no OA provoked).' }],
+          15: [{ name: 'Soul of Vengeance', desc: 'Immediately after a creature under your Vow of Enmity hits or misses with an attack roll, you may take a Reaction to make a melee attack against that creature (if in range).' }],
+          20: [{ name: 'Avenging Angel', desc: 'Bonus Action: gain benefits for 10 minutes. Flight: spectral wings give Fly Speed 60 ft (hover). Frightful Aura: enemies starting their turn in your Aura of Protection make a WIS save or be Frightened for 1 min (or until they take damage). Attacks against Frightened creatures have Advantage. 1/LR or expend a 5th-level slot.' }]
+        }
+      },
+      'Oath of Conquest': {
+        source: 'Xanathar\'s Guide to Everything (legacy)',
+        tenets: ['Douse the Flame of Hope.', 'Rule with an Iron Fist.', 'Strength Above All.'],
+        expandedSpells: {
+          3:  [{ name: 'Armor of Agathys', level: '1st' }, { name: 'Command', level: '1st' }],
+          5:  [{ name: 'Hold Person', level: '2nd' }, { name: 'Spiritual Weapon', level: '2nd' }],
+          9:  [{ name: 'Bestow Curse', level: '3rd' }, { name: 'Fear', level: '3rd' }],
+          13: [{ name: 'Dominate Beast', level: '4th' }, { name: 'Stoneskin', level: '4th' }],
+          17: [{ name: 'Cloudkill', level: '5th' }, { name: 'Dominate Person', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Conquering Presence', action: 'Action', desc: 'Each creature of your choice within 30 ft must make a WIS save. On a failed save, the creature is Frightened of you for 1 minute (save at end of each of its turns to end).' },
+          { name: 'Guided Strike', action: 'on attack roll', desc: '+10 bonus to the attack roll. Decide after seeing the roll, before the DM says hit/miss.' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Conquering Presence & Guided Strike', desc: 'See CD card for both options.' }, { name: 'Oath of Conquest Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Aura of Conquest', desc: 'Frightened creatures in your aura have their Speed reduced to 0, and take psychic damage equal to half your paladin level if they start their turn there.' }],
+          15: [{ name: 'Scornful Rebuke', desc: 'Whenever a creature hits you with an attack, that creature takes psychic damage equal to your CHA modifier (min 1).' }],
+          20: [{ name: 'Invincible Conqueror', desc: 'Action: become an avatar of conquest for 1 minute. Resistance to all damage; one additional attack when you take the Attack action; melee weapon crits on 19-20. 1/LR.' }]
+        }
+      },
+      'Oath of Redemption': {
+        source: 'Xanathar\'s Guide to Everything (legacy)',
+        tenets: ['Peace — violence is a last resort.', 'Innocence — set the proper example.', 'Patience — change takes time.', 'Wisdom — keep heart and mind clear.'],
+        expandedSpells: {
+          3:  [{ name: 'Sanctuary', level: '1st' }, { name: 'Sleep', level: '1st' }],
+          5:  [{ name: 'Calm Emotions', level: '2nd' }, { name: 'Hold Person', level: '2nd' }],
+          9:  [{ name: 'Counterspell', level: '3rd' }, { name: 'Hypnotic Pattern', level: '3rd' }],
+          13: [{ name: 'Otiluke\'s Resilient Sphere', level: '4th' }, { name: 'Stoneskin', level: '4th' }],
+          17: [{ name: 'Hold Monster', level: '5th' }, { name: 'Wall of Force', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Emissary of Peace', action: 'Bonus Action', desc: '+5 bonus to your CHA (Persuasion) checks for the next 10 minutes.' },
+          { name: 'Rebuke the Violent', action: 'Reaction', desc: 'After an attacker within 30 ft deals damage to a creature other than you, force the attacker to make a WIS save. On a failed save, the attacker takes radiant damage equal to the damage it dealt; half on success.' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Emissary of Peace & Rebuke the Violent', desc: 'See CD card.' }, { name: 'Oath of Redemption Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Aura of the Guardian', desc: 'When a creature within 10 ft (30 ft at 18+) takes damage, use your Reaction to magically take that damage instead. Damage taken this way cannot be reduced.' }],
+          15: [{ name: 'Protective Spirit', desc: 'Regain HP equal to 1d6 + half paladin level if you end your turn in combat below half HP and you are not Incapacitated.' }],
+          20: [{ name: 'Emissary of Redemption', desc: 'Become an avatar of peace: Resistance to all damage from other creatures, and a creature that hits you takes radiant damage equal to half the damage you take. If you attack/spell/damage a creature, neither benefit works against that creature until you finish a Long Rest.' }]
+        }
+      },
+      'Oath of the Crown': {
+        source: 'Sword Coast Adventurer\'s Guide (legacy)',
+        tenets: ['Law is paramount.', 'Loyalty — your word is your bond.', 'Courage — do what needs to be done.', 'Responsibility — own the consequences.'],
+        expandedSpells: {
+          3:  [{ name: 'Command', level: '1st' }, { name: 'Compelled Duel', level: '1st' }],
+          5:  [{ name: 'Warding Bond', level: '2nd' }, { name: 'Zone of Truth', level: '2nd' }],
+          9:  [{ name: 'Aura of Vitality', level: '3rd' }, { name: 'Spirit Guardians', level: '3rd' }],
+          13: [{ name: 'Banishment', level: '4th' }, { name: 'Guardian of Faith', level: '4th' }],
+          17: [{ name: 'Circle of Power', level: '5th' }, { name: 'Geas', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Champion Challenge', action: 'Bonus Action', desc: 'Each creature of your choice within 30 ft makes a WIS save. On a fail, the creature can\'t willingly move more than 30 ft away from you. Ends on the creature if you are Incapacitated/die, or if it ever ends up >30 ft away.' },
+          { name: 'Turn the Tide', action: 'Bonus Action', desc: 'Each creature of your choice that can hear you within 30 ft regains HP = 1d6 + CHA mod (min 1) if it has no more than half its HP.' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Champion Challenge & Turn the Tide', desc: 'See CD card.' }, { name: 'Oath of the Crown Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Divine Allegiance', desc: 'When a creature within 5 ft takes damage, Reaction to magically substitute your own HP for theirs. You take the damage; it can\'t be reduced or prevented.' }],
+          15: [{ name: 'Unyielding Saint', desc: 'Advantage on saving throws to avoid becoming Paralyzed or Stunned.' }],
+          20: [{ name: 'Exalted Champion', desc: 'Action: gain benefits for 1 hour. Resistance to B/P/S from nonmagical weapons; allies have Advantage on death saves within 30 ft of you; you and allies in 30 ft have Advantage on WIS saves. Ends early if Incapacitated or dies. 1/LR.' }]
+        }
+      },
+      'Oath of the Watchers': {
+        source: 'Tasha\'s Cauldron of Everything (legacy)',
+        tenets: ['Vigilance — be ever alert for corruption.', 'Loyalty — never accept gifts from fiends.', 'Discipline — keep your blade sharp and mind keen.'],
+        expandedSpells: {
+          3:  [{ name: 'Alarm', level: '1st' }, { name: 'Detect Magic', level: '1st' }],
+          5:  [{ name: 'Moonbeam', level: '2nd' }, { name: 'See Invisibility', level: '2nd' }],
+          9:  [{ name: 'Counterspell', level: '3rd' }, { name: 'Nondetection', level: '3rd' }],
+          13: [{ name: 'Aura of Purity', level: '4th' }, { name: 'Banishment', level: '4th' }],
+          17: [{ name: 'Hold Monster', level: '5th' }, { name: 'Scrying', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Watcher\'s Will', action: 'Action', desc: 'Choose up to CHA mod creatures within 30 ft. For 1 minute, you and the chosen creatures have Advantage on INT, WIS, and CHA saves.' },
+          { name: 'Abjure the Extraplanar', action: 'Action', desc: 'Each Aberration, Celestial, Elemental, Fey, or Fiend within 30 ft that can hear you makes a WIS save. On a fail, the creature is Turned for 1 minute or until it takes damage.' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Watcher\'s Will & Abjure the Extraplanar', desc: 'See CD card.' }, { name: 'Oath of the Watchers Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Aura of the Sentinel', desc: 'You and chosen creatures within 10 ft (30 ft at 18+) gain a bonus to Initiative equal to your Proficiency Bonus.' }],
+          15: [{ name: 'Vigilant Rebuke', desc: 'When you (or a creature you can see within 30 ft) succeed on an INT/WIS/CHA save, Reaction to deal 2d8 + CHA force damage to the creature that forced the save.' }],
+          20: [{ name: 'Mortal Bulwark', desc: 'Bonus Action: gain benefits for 1 minute. Truesight 120 ft; Advantage on attacks against Aberrations/Celestials/Elementals/Fey/Fiends; on hit deal damage AND force a CHA save vs. your spell DC — fail banishes the creature to its native plane (24h immunity on success). 1/LR or expend a 5th-level slot.' }]
+        }
+      },
+      'Oathbreaker': {
+        source: 'Dungeon Master\'s Guide (legacy)',
+        tenets: ['Whatever light burned in your heart has been extinguished. Only darkness remains.'],
+        expandedSpells: {
+          3:  [{ name: 'Hellish Rebuke', level: '1st' }, { name: 'Inflict Wounds', level: '1st' }],
+          5:  [{ name: 'Crown of Madness', level: '2nd' }, { name: 'Darkness', level: '2nd' }],
+          9:  [{ name: 'Animate Dead', level: '3rd' }, { name: 'Bestow Curse', level: '3rd' }],
+          13: [{ name: 'Blight', level: '4th' }, { name: 'Confusion', level: '4th' }],
+          17: [{ name: 'Contagion', level: '5th' }, { name: 'Dominate Person', level: '5th' }]
+        },
+        channelDivinity: [
+          { name: 'Control Undead', action: 'Action', desc: 'Target one Undead within 30 ft. WIS save or it obeys your commands for 24h (or until you use this CD again). Undead with CR ≥ your paladin level is immune.' },
+          { name: 'Dreadful Aspect', action: 'Action', desc: 'Each creature of your choice within 30 ft that can see you makes a WIS save. On a fail, Frightened of you for 1 minute. A Frightened creature ending its turn >30 ft from you may save again to end the effect.' }
+        ],
+        perLevel: {
+          3:  [{ name: 'Channel Divinity: Control Undead & Dreadful Aspect', desc: 'See CD card.' }, { name: 'Oathbreaker Spells', desc: 'Always prepared per the oath spell table.' }],
+          7:  [{ name: 'Aura of Hate', desc: 'You, and any Fiends/Undead within 10 ft (30 ft at 18+), gain a bonus to melee weapon damage rolls equal to your CHA mod (min +1). A creature can benefit from this from only one paladin at a time.' }],
+          15: [{ name: 'Supernatural Resistance', desc: 'Resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons.' }],
+          20: [{ name: 'Dread Lord', desc: 'Action: surround yourself with an aura of gloom for 1 minute. Bright light in 30 ft becomes Dim Light. Enemies Frightened by you in the aura take 4d10 psychic at start of their turns. You and chosen allies in the aura are draped in shadow (sight-reliant creatures have Disadvantage on attacks against them). Bonus Action while active: melee spell attack — on hit, 3d10 + CHA necrotic. 1/LR.' }]
+        }
+      }
+    },
+    // Per-class-level progression. Each entry:
+    //   features: list of {name, desc} the player gains at this class level
+    //   asi: true if it's an ASI/feat level (4, 8, 12, 16, 19)
+    //   subclassPick: true at level 3
+    //   spellSlots: { 1: n, 2: n, 3: n, 4: n, 5: n } — total slots available
+    //   prepared: prepared spell count for this level
+    //   channelDivinity: CD uses per Short/Long Rest at this level
+    //   weaponMastery: # weapons mastered
+    //   fightingStyle: true at L2 (player picks)
+    perLevel: [
+      null,
+      // L1 — Lay On Hands, Spellcasting, Weapon Mastery (2)
+      { features: [
+          { name: 'Lay On Hands', desc: 'Pool of healing power equal to 5 × paladin level HP. Bonus Action to touch a creature (including yourself) and restore HP from the pool (up to the pool\'s remaining HP). Expend 5 HP from the pool to remove the Poisoned condition (those HP don\'t also heal). Refills on a Long Rest.' },
+          { name: 'Spellcasting', desc: 'You cast Paladin spells using Charisma. Holy Symbol as Spellcasting Focus. You prepare a list of Paladin spells equal to the number in the table; that list grows as you level. Spells must be of a level for which you have spell slots. You always have prepared Smite spells you cast as Bonus Actions (Divine Smite at L2+, etc.). On a Long Rest you may replace one spell on the list.' },
+          { name: 'Weapon Mastery', desc: 'Gain the Mastery property of 2 weapons of your choice with which you have proficiency. Swap on a Long Rest.' }
+        ], spellSlots: { 1: 2 }, prepared: 2, weaponMastery: 2 },
+      // L2 — Fighting Style, Paladin's Smite
+      { features: [
+          { name: 'Fighting Style', desc: 'Gain a Fighting Style feat of your choice (see Fighting Style picker). Alternatively, choose Blessed Warrior: learn 2 Cleric cantrips (Guidance and Sacred Flame recommended). Charisma is your spellcasting ability for them.' },
+          { name: 'Paladin\'s Smite', desc: 'You always have the Divine Smite spell prepared. You can cast it once without expending a spell slot per Long Rest.' }
+        ], spellSlots: { 1: 2 }, prepared: 3, fightingStyle: true },
+      // L3 — Channel Divinity, Paladin Subclass
+      { features: [
+          { name: 'Channel Divinity', desc: 'Channel divine energy directly from the Outer Planes. 2 uses; regain 1 on a Short Rest, all on a Long Rest. Each use, choose one effect this class allows. Save DC = your Spell Save DC. Base effect: Divine Sense — Bonus Action to detect Celestials, Fiends, Undead within 60 ft for 10 min (or until Incapacitated); also detects consecrated/desecrated places. Other CD options come from your Sacred Oath.' },
+          { name: 'Paladin Subclass', desc: 'Choose your Sacred Oath. Each oath grants its level 3 features (additional features at 7, 15, 20).' }
+        ], spellSlots: { 1: 3 }, prepared: 4, channelDivinity: 2, subclassPick: true },
+      // L4 — ASI
+      { features: [
+          { name: 'Ability Score Improvement', desc: 'Gain the Ability Score Improvement feat or another feat of your choice. Gained again at 8, 12, 16.' }
+        ], spellSlots: { 1: 3 }, prepared: 5, channelDivinity: 2, asi: true },
+      // L5 — Extra Attack, Faithful Steed
+      { features: [
+          { name: 'Extra Attack', desc: 'You can attack twice, instead of once, when you take the Attack action on your turn.' },
+          { name: 'Faithful Steed', desc: 'You always have the Find Steed spell prepared. You may cast it once without expending a slot per Long Rest.' }
+        ], spellSlots: { 1: 4, 2: 2 }, prepared: 6, channelDivinity: 2 },
+      // L6 — Aura of Protection
+      { features: [
+          { name: 'Aura of Protection', desc: 'You radiate a 10-foot Emanation (30 ft at L18). You and your allies in the aura gain a bonus to saving throws equal to your CHA mod (min +1). Suppressed while you are Incapacitated. If another Paladin is also present, a creature picks which aura it benefits from at any time.' }
+        ], spellSlots: { 1: 4, 2: 2 }, prepared: 6, channelDivinity: 2 },
+      // L7 — Subclass Feature
+      { features: [
+          { name: 'Subclass Feature', desc: 'See your Sacred Oath entry for its level 7 feature.' }
+        ], spellSlots: { 1: 4, 2: 3 }, prepared: 7, channelDivinity: 2 },
+      // L8 — ASI
+      { features: [
+          { name: 'Ability Score Improvement', desc: 'ASI or feat of your choice.' }
+        ], spellSlots: { 1: 4, 2: 3 }, prepared: 7, channelDivinity: 2, asi: true },
+      // L9 — Abjure Foes
+      { features: [
+          { name: 'Abjure Foes', desc: 'Magic action: expend a CD use to overwhelm foes with awe. Target up to CHA mod creatures (min 1) you can see within 60 ft. Each makes a WIS save or is Frightened for 1 minute (or until damaged). While Frightened this way, the target can only do one of move/Action/Bonus Action per turn.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 2 }, prepared: 9, channelDivinity: 2 },
+      // L10 — Aura of Courage
+      { features: [
+          { name: 'Aura of Courage', desc: 'You and allies have Immunity to the Frightened condition while in your Aura of Protection. A Frightened ally entering the aura has the condition suppressed while there.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 2 }, prepared: 9, channelDivinity: 2 },
+      // L11 — Radiant Strikes
+      { features: [
+          { name: 'Radiant Strikes', desc: 'When you hit with a melee weapon or Unarmed Strike, the target takes an extra 1d8 Radiant damage.' },
+          { name: 'Channel Divinity +1 Use', desc: 'You now have 3 Channel Divinity uses (regained on Short/Long Rest).' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3 }, prepared: 10, channelDivinity: 3 },
+      // L12 — ASI
+      { features: [
+          { name: 'Ability Score Improvement', desc: 'ASI or feat of your choice.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3 }, prepared: 10, channelDivinity: 3, asi: true },
+      // L13 — (nothing new)
+      { features: [
+          { name: 'No new class feature', desc: 'No new Paladin feature at this level (slots improve only).' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 1 }, prepared: 11, channelDivinity: 3 },
+      // L14 — Restoring Touch
+      { features: [
+          { name: 'Restoring Touch', desc: 'When you use Lay On Hands on a creature, you may also remove one or more of: Blinded, Charmed, Deafened, Frightened, Paralyzed, Stunned. Expend 5 HP from the pool per condition removed (those HP don\'t also heal).' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 1 }, prepared: 11, channelDivinity: 3 },
+      // L15 — Subclass Feature
+      { features: [
+          { name: 'Subclass Feature', desc: 'See your Sacred Oath entry for its level 15 feature.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 2 }, prepared: 12, channelDivinity: 3 },
+      // L16 — ASI
+      { features: [
+          { name: 'Ability Score Improvement', desc: 'ASI or feat of your choice.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 2 }, prepared: 12, channelDivinity: 3, asi: true },
+      // L17 — (nothing new)
+      { features: [
+          { name: 'No new class feature', desc: 'No new Paladin feature at this level (slots improve only).' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 3, 5: 1 }, prepared: 14, channelDivinity: 3 },
+      // L18 — Aura Expansion
+      { features: [
+          { name: 'Aura Expansion', desc: 'Your Aura of Protection is now a 30-foot Emanation.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 3, 5: 1 }, prepared: 14, channelDivinity: 3 },
+      // L19 — Epic Boon
+      { features: [
+          { name: 'Epic Boon', desc: 'Gain an Epic Boon feat or another feat of your choice. Boon of Truesight is recommended.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2 }, prepared: 15, channelDivinity: 3, asi: true },
+      // L20 — Subclass Capstone
+      { features: [
+          { name: 'Subclass Capstone', desc: 'See your Sacred Oath entry for its level 20 capstone feature.' }
+        ], spellSlots: { 1: 4, 2: 3, 3: 3, 4: 3, 5: 2 }, prepared: 15, channelDivinity: 3 }
+    ]
   }
 };
 
@@ -5975,7 +6279,33 @@ const DEFAULT_STATE = {
   elementalGiftFlyUsed: 0,   // BA fly speed (Warlock 6+ Genie), PB/Long Rest
   // Mystic Arcanum (Warlock 11/13/15/17): one spell each, 1/Long Rest cast
   mysticArcanum: {},         // { 6: 'spell name', 7: '...', 8: '...', 9: '...' }
-  mysticArcanumUsed: {}      // { 6: true } if spent this Long Rest
+  mysticArcanumUsed: {},     // { 6: true } if spent this Long Rest
+  // ============================================================
+  // Paladin (Haldeyr's single class)
+  // ============================================================
+  // Lay on Hands pool — refilled by Long Rest. HP spent this LR.
+  layOnHandsUsed: 0,
+  // Channel Divinity uses spent — recover 1 on SR, all on LR
+  channelDivinityUsed: 0,
+  // Paladin spell slots used, keyed by slot level (1-5).
+  // E.g., { 1: 2, 2: 0, 3: 0, 4: 0, 5: 0 } means 2 first-level slots spent.
+  paladinSlotsUsed: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+  // Paladin prepared spell list — names of Paladin spells the player has prepared
+  paladinPrepared: [],
+  // Fighting Style picked at L2 (one of FIGHTING_STYLES or 'Blessed Warrior')
+  fightingStyle: '',
+  // Blessed Warrior cleric cantrips (when fightingStyle === 'Blessed Warrior')
+  blessedWarriorCantrips: [],
+  // Sacred Oath chosen at L3 (matches a key in CLASS_DATA.paladin.subclassData)
+  sacredOath: '',
+  // Paladin's Smite (Divine Smite free cast — 1/LR) — true if used since last LR
+  paladinsSmiteUsed: false,
+  // Faithful Steed (Find Steed free cast at L5+ — 1/LR)
+  faithfulSteedUsed: false,
+  // Subclass capstone (Holy Nimbus / Avenging Angel / etc.) — 1/LR
+  oathCapstoneUsed: false,
+  // Per-oath one-shot trackers (Undying Sentinel L15 Ancients, etc.)
+  oathFeatureUses: {}        // { undyingSentinelUsed: false, invincibleConquerorUsed: false, ... }
 };
 
 let state = loadState();
@@ -6149,22 +6479,24 @@ function profBonus(level) {
 function classBreakdown(level) {
   // Read from state.levelHistory — populated by the Level Up modal.
   // Counts the class entries up to (but not past) the given level.
-  // Returns { b, w } for barbarian/warlock counts; legacy a/r aliased to 0 so
-  // Rivet-era render branches (gated on a>0 or r>0) cleanly soft-fail.
-  let b = 0, w = 0;
+  // Returns counts per class; legacy keys aliased to 0 so older render branches
+  // gated on a>0 / r>0 / b>0 / w>0 cleanly soft-fail to hidden for Haldeyr.
+  let b = 0, w = 0, p = 0;
   const history = state.levelHistory || [];
   const limit = Math.min(history.length, level);
   for (let i = 0; i < limit; i++) {
     const entry = history[i];
     if (entry.class === 'barbarian') b++;
     else if (entry.class === 'warlock') w++;
+    else if (entry.class === 'paladin') p++;
   }
-  return { b, w, a: 0, r: 0 };
+  return { b, w, p, a: 0, r: 0 };
 }
 
 function classString(level) {
-  const { b, w } = classBreakdown(level);
+  const { b, w, p } = classBreakdown(level);
   const parts = [];
+  if (p > 0) parts.push(`Paladin ${p}`);
   if (b > 0) parts.push(`Barbarian ${b}`);
   if (w > 0) parts.push(`Warlock ${w}`);
   if (parts.length === 0) return 'Level Up to assign his first class';
@@ -11000,6 +11332,14 @@ document.getElementById('long-rest-btn').addEventListener('click', () => {
     state.ancestryUsesUsed = 0;
     state.strikeOfTheGiantsUsed = 0;
     state.strikeOfTheGiantsType = '';
+    // Paladin — refill Lay on Hands, Channel Divinity, all spell slots, free smite, capstone, etc.
+    state.layOnHandsUsed = 0;
+    state.channelDivinityUsed = 0;
+    state.paladinSlotsUsed = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    state.paladinsSmiteUsed = false;
+    state.faithfulSteedUsed = false;
+    state.oathCapstoneUsed = false;
+    state.oathFeatureUses = {};
     state.bottledRespiteUsed = false;
     state.elementalGiftFlyUsed = 0;
     state.vesselHpCurrent = null;
