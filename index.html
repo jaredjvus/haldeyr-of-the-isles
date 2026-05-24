@@ -9114,6 +9114,7 @@ function saveGearForm() {
 function renderInventory() {
   for (const cat of ['armament', 'person']) {
     const ul = document.getElementById('inv-' + cat);
+    if (!ul) continue;  // String-inventory cards were replaced by the Gear card on Haldeyr.
     ul.innerHTML = '';
     state.inventory[cat].forEach((item, idx) => {
       const li = document.createElement('li');
@@ -9200,12 +9201,16 @@ document.getElementById('inspiration-toggle').addEventListener('click', () => {
   renderCombatResources(state.level);
 });
 
-// Giant Ancestry quick-switch (Goliath species card)
-document.getElementById('giant-ancestry-select').addEventListener('change', (e) => {
-  state.giantAncestry = e.target.value;
-  saveState();
-  renderGiantAncestry();
-});
+// Giant Ancestry quick-switch (Goliath species card) — Kano-era only.
+// Haldeyr/Caelen/Rivet don't have this element; guard before attaching.
+{
+  const _gaSel = document.getElementById('giant-ancestry-select');
+  if (_gaSel) _gaSel.addEventListener('change', (e) => {
+    state.giantAncestry = e.target.value;
+    saveState();
+    renderGiantAncestry();
+  });
+}
 
 // ============================================================
 // LEVEL UP MODAL (Phase 2 foundation)
