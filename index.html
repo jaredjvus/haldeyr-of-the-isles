@@ -366,6 +366,12 @@ body::before {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
+/* Single-class sheets: only one button in the picker — center it. */
+.modal-options:has(> :only-child) {
+  grid-template-columns: 1fr;
+  max-width: 360px;
+  margin: 0 auto;
+}
 .modal-option {
   background: rgba(38, 45, 52, 0.85);
   border: 1px solid var(--gold-tarnish);
@@ -1444,6 +1450,11 @@ body.dm-mode .infusion-row input { pointer-events: none; opacity: 0.5; }
   transition: border-color 0.2s;
 }
 .stat-input:focus { border-color: var(--gold); }
+
+.stats-grid.locked .stat-input { display: none; }
+.stats-grid.locked .stat-block { padding: 0.6rem 0.4rem; }
+.point-buy-tracker.locked { display: none; }
+.bg-bonuses-hint.locked { display: none; }
 
 .point-buy-tracker {
   display: flex;
@@ -3564,7 +3575,7 @@ body.dm-mode .dm-hide { display: none; }
       <span class="pb-spent" id="pb-spent">0</span> / <span class="pb-cap">27</span>
       <span class="pb-status" id="pb-status">empty pool — set his scores</span>
     </div>
-    <p style="text-align:center; font-style:italic; color:var(--parchment-aged); font-size:0.9rem; margin-top: 0.5rem;">
+    <p style="text-align:center; font-style:italic; color:var(--parchment-aged); font-size:0.9rem; margin-top: 0.5rem;" class="bg-bonuses-hint">
       Background bonuses (Sage): the player distributes <strong>+2 / +1</strong> (or <strong>+1 / +1 / +1</strong>) across CON, INT, and WIS, then layers Half-Elf species bonuses (<strong>+2 CHA</strong> + two free +1s). Set scores in the Level-Up modal.
     </p>
 
@@ -10973,7 +10984,25 @@ function confirmLevelUp() {
   render();
 }
 
-document.getElementById('level-up-btn').addEventListener('click', openLevelUpModal);
+// Level Up button: warn if the player hasn't allocated any point-buy yet
+// (all six base scores still at default 8 = 48 total).
+document.getElementById('level-up-btn').addEventListener('click', () => {
+  if ((state.maxLevel || 0) === 0) {
+    const bs = state.baseStats || (typeof BASE_STATS_DEFAULT !== 'undefined' ? BASE_STATS_DEFAULT : (typeof BASE_STATS !== 'undefined' ? BASE_STATS : null));
+    if (bs) {
+      const total = (bs.str || 0) + (bs.dex || 0) + (bs.con || 0) + (bs.int || 0) + (bs.wis || 0) + (bs.cha || 0);
+      if (total === 48) {
+        showConfirm('Set ability scores first?',
+          `<p>Looks like the point-buy editor is untouched — every base score is still 8.</p>
+           <p>You can <strong>cancel</strong>, set scores in the row at the top of the sheet, then click Level Up again — OR <strong>proceed anyway</strong> and edit base stats later.</p>`,
+          () => openLevelUpModal(),
+          { okLabel: 'Proceed anyway', cancelLabel: 'Set scores first' });
+        return;
+      }
+    }
+  }
+  openLevelUpModal();
+});
 
 // Gear modal wiring
 document.getElementById('gear-add-btn').addEventListener('click', () => openGearModal(null));
