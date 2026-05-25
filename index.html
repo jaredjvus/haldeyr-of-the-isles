@@ -7560,14 +7560,18 @@ function renderConcentrationOptions(level) {
 
 function renderMagicCard(level) {
   const card = document.getElementById('magic-card');
-  const { w } = classBreakdown(level);
-  if (w === 0) {
+  const { w, p } = classBreakdown(level);
+  if (w === 0 && p === 0) {
     card.hidden = true;
     return;
   }
   card.hidden = false;
 
-  // Spell stat row: Save DC + Attack Bonus (always shown when Warlock 1+)
+  const wlData = w > 0 ? CLASS_DATA.warlock.perLevel[w] : null;
+  const palData = p > 0 ? CLASS_DATA.paladin.perLevel[p] : null;
+  const casterLabel = p > 0 ? 'Paladin' : 'Warlock';
+
+  // Spell stat row: Save DC + Attack Bonus
   const stats = computeStats(level);
   const pb = profBonus(level);
   const chaMod = mod(stats.cha);
@@ -7578,14 +7582,13 @@ function renderMagicCard(level) {
     statRow.innerHTML = `
       <div class="spell-stat-cell"><div class="spell-stat-label">Spell Save DC</div><div class="spell-stat-value">${spellSaveDC}</div><div class="spell-stat-sub">8 + PB + CHA</div></div>
       <div class="spell-stat-cell"><div class="spell-stat-label">Spell Attack</div><div class="spell-stat-value">${spellAttackBonus >= 0 ? '+' : ''}${spellAttackBonus}</div><div class="spell-stat-sub">PB + CHA</div></div>
-      <div class="spell-stat-cell"><div class="spell-stat-label">Casting Ability</div><div class="spell-stat-value">CHA</div><div class="spell-stat-sub">Warlock</div></div>
+      <div class="spell-stat-cell"><div class="spell-stat-label">Casting Ability</div><div class="spell-stat-value">CHA</div><div class="spell-stat-sub">${casterLabel}</div></div>
     `;
   }
 
-  // Pact Magic slot summary (single tier; pip controls live in Combat Resources)
+  // Slot summary (single tier for Pact Magic; per-level rows for Paladin half-caster)
   const slotsContainer = document.getElementById('spell-slots');
   slotsContainer.innerHTML = '';
-  const wlData = CLASS_DATA.warlock.perLevel[w];
   if (wlData && wlData.pactSlots) {
     const slotsUsed = Math.min(state.pactSlotsUsed || 0, wlData.pactSlots.count);
     const slotsAvail = wlData.pactSlots.count - slotsUsed;
@@ -7593,6 +7596,19 @@ function renderMagicCard(level) {
     summary.className = 'slot-row';
     summary.innerHTML = `<span class="slot-label">Pact Magic</span><span class="resource-readout" style="margin-left:auto;">${slotsAvail} / ${wlData.pactSlots.count} · slot ${wlData.pactSlots.level}</span>`;
     slotsContainer.appendChild(summary);
+  }
+  if (palData && palData.spellSlots) {
+    const used = state.paladinSlotsUsed || {};
+    const slotLevels = Object.keys(palData.spellSlots).map(Number).sort((a, b) => a - b);
+    for (const lvl of slotLevels) {
+      const max = palData.spellSlots[lvl];
+      const u = Math.min(used[lvl] || 0, max);
+      const avail = max - u;
+      const row = document.createElement('div');
+      row.className = 'slot-row';
+      row.innerHTML = `<span class="slot-label">${ordinalSpellLevel(lvl)} slots</span><span class="resource-readout" style="margin-left:auto;">${avail} / ${max}</span>`;
+      slotsContainer.appendChild(row);
+    }
   }
 
   // Cantrips list
@@ -7615,7 +7631,8 @@ function renderMagicCard(level) {
   let cantrips = (state.cantripsKnown || []).map(name => findSpellByName(name)).filter(Boolean);
   if (_spellSearch) cantrips = cantrips.filter(s => (s.name || '').toLowerCase().includes(_spellSearch) || (s.school || '').toLowerCase().includes(_spellSearch));
   cantrips.sort((a, b) => a.name.localeCompare(b.name));
-  document.getElementById('cantrip-count').textContent = `${cantrips.length} / ${wlData ? wlData.cantrips : 0}`;
+  const _maxCantrips = wlData ? wlData.cantrips : (palData ? (palData.cantrips || 0) : 0);
+  document.getElementById('cantrip-count').textContent = `${cantrips.length} / ${_maxCantrips}`;
   if (cantrips.length === 0) {
     cantripList.innerHTML = '<p style="font-style: italic; color: var(--parchment-aged); font-size: 0.85rem; margin: 0.4rem 0;">No cantrips yet.</p>';
   } else {
@@ -7649,7 +7666,8 @@ function renderMagicCard(level) {
     const da = spellLevelToNum(a.spell.level) - spellLevelToNum(b.spell.level);
     return da !== 0 ? da : a.spell.name.localeCompare(b.spell.name);
   });
-  document.getElementById('prepared-count').textContent = `${userPrepared.length} / ${wlData ? wlData.prepared : 0}`;
+  const _maxPrepared = wlData ? wlData.prepared : (palData ? (palData.prepared || 0) : 0);
+  document.getElementById('prepared-count').textContent = `${userPrepared.length} / ${_maxPrepared}`;
   if (all.length === 0) {
     preparedList.innerHTML = '<p style="font-style: italic; color: var(--parchment-aged); font-size: 0.85rem; margin: 0.4rem 0;">No prepared spells yet.</p>';
   } else {
@@ -7674,7 +7692,7 @@ function renderMagicCard(level) {
         <span class="spell-meta">${spell.school} · ${spell.range}</span>
         <span class="spell-actions">
           <button class="spell-info" data-spell="${spell.name}" title="Spell details">ⓘ</button>
-          <button class="spell-cast ${slotsAvailable ? '' : 'used'}" data-spell="${spell.name}"${slotsAvailable ? '' : ' disabled title="No Pact Magic slot available — Short Rest to recover"'}>${slotsAvailable ? 'Cast' : 'No slot'}</button>
+          <button class="spell-cast ${slotsAvailable ? '' : 'used'}" data-spell="${spell.name}"${slotsAvailable ? '' : ' disabled title="No spell slot of sufficient level available — Long Rest to recover"'}>${slotsAvailable ? 'Cast' : 'No slot'}</button>
         </span>
       `;
       preparedList.appendChild(row);
@@ -8669,17 +8687,37 @@ function renderSpells(level) {
 function getValidSlotTiers(spell, level) {
   const minLevel = spellLevelToNum(spell.level);
   if (!minLevel) return []; // cantrip
-  const { w } = classBreakdown(level);
-  if (w < 1) return [];
-  const wlData = CLASS_DATA.warlock.perLevel[w];
-  if (!wlData || !wlData.pactSlots) return [];
-  if (wlData.pactSlots.level < minLevel) return [];
-  return [{
-    key: 'pact',
-    label: `Pact slot (${ordinalSpellLevel(wlData.pactSlots.level)})`,
-    max: wlData.pactSlots.count,
-    used: state.pactSlotsUsed || 0
-  }];
+  const { w, p } = classBreakdown(level);
+  const tiers = [];
+  if (w >= 1) {
+    const wlData = CLASS_DATA.warlock.perLevel[w];
+    if (wlData && wlData.pactSlots && wlData.pactSlots.level >= minLevel) {
+      tiers.push({
+        key: 'pact',
+        label: `Pact slot (${ordinalSpellLevel(wlData.pactSlots.level)})`,
+        max: wlData.pactSlots.count,
+        used: state.pactSlotsUsed || 0
+      });
+    }
+  }
+  if (p >= 1) {
+    const palData = CLASS_DATA.paladin.perLevel[p];
+    if (palData && palData.spellSlots) {
+      const used = state.paladinSlotsUsed || {};
+      const slotLevels = Object.keys(palData.spellSlots).map(Number).sort((a, b) => a - b);
+      for (const lvl of slotLevels) {
+        if (lvl < minLevel) continue;
+        tiers.push({
+          key: 'pal' + lvl,
+          slotLevel: lvl,
+          label: `${ordinalSpellLevel(lvl)} slot`,
+          max: palData.spellSlots[lvl],
+          used: used[lvl] || 0
+        });
+      }
+    }
+  }
+  return tiers;
 }
 
 function openCastPopover(spell, anchor) {
@@ -8712,6 +8750,9 @@ function openCastPopover(spell, anchor) {
           // Spend the slot
           if (t.key === 'pact') {
             state.pactSlotsUsed = (state.pactSlotsUsed || 0) + 1;
+          } else if (t.key && t.key.startsWith('pal')) {
+            state.paladinSlotsUsed = state.paladinSlotsUsed || {};
+            state.paladinSlotsUsed[t.slotLevel] = (state.paladinSlotsUsed[t.slotLevel] || 0) + 1;
           } else {
             state.usedSlots[t.key] = (state.usedSlots[t.key] || 0) + 1;
           }
@@ -10740,16 +10781,29 @@ function showLevelUpDetail(klass, classLevel) {
     }
   }
 
-  // Spell slot / cantrip / prepared spell deltas (Artificer only)
+  // Spell slot / cantrip / prepared spell deltas. Handles both shapes:
+  //   - Artificer-style: data.slots is an array indexed 0-4 (slot levels 1-5)
+  //   - Paladin-style:   data.spellSlots is an object keyed by slot level 1-5
+  const _slotAt = (d, lvl) => {
+    if (!d) return 0;
+    if (Array.isArray(d.slots)) return d.slots[lvl - 1] || 0;
+    if (d.spellSlots) return d.spellSlots[lvl] || 0;
+    return 0;
+  };
   if (cls.isHalfCaster && classLevel > 1) {
     const prev = cls.perLevel[classLevel - 1];
     const deltas = [];
-    if (data.cantrips > prev.cantrips) deltas.push(`+${data.cantrips - prev.cantrips} cantrip`);
-    if (data.prepared > prev.prepared) deltas.push(`+${data.prepared - prev.prepared} prepared spell${data.prepared - prev.prepared > 1 ? 's' : ''}`);
-    for (let i = 0; i < 5; i++) {
-      if ((data.slots[i] || 0) > (prev.slots[i] || 0)) {
-        const diff = data.slots[i] - prev.slots[i];
-        deltas.push(`+${diff} level-${i + 1} slot${diff > 1 ? 's' : ''}`);
+    if ((data.cantrips || 0) > (prev.cantrips || 0)) deltas.push(`+${(data.cantrips || 0) - (prev.cantrips || 0)} cantrip`);
+    if ((data.prepared || 0) > (prev.prepared || 0)) {
+      const diff = (data.prepared || 0) - (prev.prepared || 0);
+      deltas.push(`+${diff} prepared spell${diff > 1 ? 's' : ''}`);
+    }
+    for (let lvl = 1; lvl <= 5; lvl++) {
+      const curS = _slotAt(data, lvl);
+      const preS = _slotAt(prev, lvl);
+      if (curS > preS) {
+        const diff = curS - preS;
+        deltas.push(`+${diff} level-${lvl} slot${diff > 1 ? 's' : ''}`);
       }
     }
     if (deltas.length > 0) {
@@ -10759,9 +10813,11 @@ function showLevelUpDetail(klass, classLevel) {
       featuresEl.appendChild(div);
     }
   } else if (cls.isHalfCaster && classLevel === 1) {
+    const firstLevelSlots = _slotAt(data, 1);
+    const cantripsLine = (data.cantrips || 0) > 0 ? `${data.cantrips} cantrips known · ` : '';
     const div = document.createElement('div');
     div.className = 'feature';
-    div.innerHTML = `<h5>Spellcasting Progression</h5><p>${data.cantrips} cantrips known · ${data.prepared} prepared spells · ${data.slots[0]} level-1 slot${data.slots[0] > 1 ? 's' : ''}</p>`;
+    div.innerHTML = `<h5>Spellcasting Progression</h5><p>${cantripsLine}${data.prepared || 0} prepared spells · ${firstLevelSlots} level-1 slot${firstLevelSlots > 1 ? 's' : ''}</p>`;
     featuresEl.appendChild(div);
   }
 
@@ -11222,39 +11278,47 @@ document.getElementById('levelup-confirm').addEventListener('click', confirmLeve
 // Edit Prepared modal (Phase 2D)
 // ============================================================
 function openEditPrepared() {
-  const { w } = classBreakdown(state.level);
-  if (w === 0) return;
-  const wlData = CLASS_DATA.warlock.perLevel[w];
-  const max = wlData.prepared;
-  const maxLvl = maxAccessibleSpellLevel('warlock', state.level);
+  const { w, p } = classBreakdown(state.level);
+  if (w === 0 && p === 0) return;
+  // Prefer paladin if present (Haldeyr is single-class paladin); fall back to warlock.
+  const klass = p > 0 ? 'paladin' : 'warlock';
+  const classLevel = p > 0 ? p : w;
+  const classData = CLASS_DATA[klass].perLevel[classLevel];
+  const max = classData.prepared;
+  const maxLvl = maxAccessibleSpellLevel(klass, classLevel);
 
   const overlay = document.getElementById('prepared-overlay');
   const prompts = document.getElementById('prepared-prompts');
+  const subtitleSuffix = klass === 'warlock'
+    ? ' Subclass-expanded spells (Genie / Efreeti) are eligible. House rule: RAW only allows 1 swap on level-up.'
+    : '';
   document.getElementById('prepared-subtitle').textContent =
-    `Pick exactly ${max} prepared Warlock spell${max > 1 ? 's' : ''} (up to ${ordinalSpellLevel(maxLvl)}). Subclass-expanded spells (Genie / Efreeti) are eligible. House rule: RAW only allows 1 swap on level-up.`;
+    `Pick up to ${max} prepared ${CLASS_DATA[klass].name} spell${max > 1 ? 's' : ''} (up to ${ordinalSpellLevel(maxLvl)}).${subtitleSuffix}`;
 
-  // Build picker pre-checking current preparedSpells. Include subclass-expanded spells.
+  // Build picker pre-checking current preparedSpells. Warlock includes subclass-expanded spells.
   const current = new Set(state.preparedSpells || []);
   const baseSpells = SPELLS.filter(s => s.level !== 'Cantrip' && !s.subclassOnly && spellLevelToNum(s.level) <= maxLvl);
-  const expandedSet = new Set(); // dedup helper for expanded names
+  const expandedSet = new Set();
   const expandedFlat = [];
-  const sub = findChosenSubclass('warlock');
-  if (sub) {
-    const subData = CLASS_DATA.warlock.subclassData && CLASS_DATA.warlock.subclassData[sub];
-    if (subData && subData.expandedSpells) {
-      const kind = subData.kind;
-      const buckets = ['generic'].concat(kind ? [kind] : []);
-      for (const bucket of buckets) {
-        const bySpellLevel = subData.expandedSpells[bucket] || {};
-        for (let l = 1; l <= maxLvl; l++) {
-          for (const spell of (bySpellLevel[l] || [])) {
-            if (expandedSet.has(spell.name)) continue;
-            expandedSet.add(spell.name);
-            expandedFlat.push({
-              ...spell,
-              level: ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'][l - 1],
-              subclassExpanded: bucket === 'generic' ? 'Genie' : kind
-            });
+  if (klass === 'warlock') {
+    const sub = findChosenSubclass('warlock');
+    if (sub) {
+      const subData = CLASS_DATA.warlock.subclassData && CLASS_DATA.warlock.subclassData[sub];
+      if (subData && subData.expandedSpells) {
+        const kind = subData.kind;
+        const buckets = ['generic'].concat(kind ? [kind] : []);
+        for (const bucket of buckets) {
+          const bySpellLevel = subData.expandedSpells[bucket] || {};
+          for (let l = 1; l <= maxLvl; l++) {
+            for (const spell of (bySpellLevel[l] || [])) {
+              if (expandedSet.has(spell.name)) continue;
+              expandedSet.add(spell.name);
+              expandedFlat.push({
+                ...spell,
+                level: ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'][l - 1],
+                subclassExpanded: bucket === 'generic' ? 'Genie' : kind
+              });
+            }
           }
         }
       }
@@ -11303,7 +11367,7 @@ function openEditPrepared() {
         label.classList.remove('disabled');
       }
     });
-    saveBtn.disabled = checked.length !== max;
+    saveBtn.disabled = checked.length > max;
   };
   checkboxes.forEach(c => c.addEventListener('change', update));
   // Wire ⓘ buttons inside the modal — open the spell info modal, don't toggle the checkbox
