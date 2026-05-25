@@ -5665,8 +5665,14 @@ const DEFAULT_STATE = {
   oathFeatureUses: {}        // { undyingSentinelUsed: false, invincibleConquerorUsed: false, ... }
 };
 
+// IS_DM must be initialized before any code path that calls saveState() (which
+// reads IS_DM to decide whether to skip cloud writes). The legacy-magic-items
+// migration runs saveState() and was hitting a temporal-dead-zone ReferenceError.
+const IS_DM = new URLSearchParams(location.search).get('view') === 'dm';
+if (document.body) document.body.classList.toggle('dm-mode', IS_DM);
+
 let state = loadState();
-migrateLegacyMagicItemsToGear();
+try { migrateLegacyMagicItemsToGear(); } catch (e) { console.error('migrateLegacyMagicItemsToGear failed:', e); }
 
 // One-time migration: port any entries from the legacy state.magicItems array
 // into state.gear, then empty state.magicItems so they don't double-count in
@@ -5734,7 +5740,9 @@ const SB_REST = `https://${SUPABASE_PROJECT}.supabase.co/rest/v1/character_sheet
 const SB_AUTH = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
 
 // DM view: read-only, polls the cloud every 5s. Activated with ?view=dm.
-const IS_DM = new URLSearchParams(location.search).get('view') === 'dm';
+// IS_DM is now declared near the top of the script (above loadState/migration)
+// so saveState() can read it during early init. Re-applying the dm-mode class
+// here in case <body> wasn't ready when the early line ran.
 if (IS_DM) document.body.classList.add('dm-mode');
 
 async function fetchRemote() {
