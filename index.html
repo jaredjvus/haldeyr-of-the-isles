@@ -4373,10 +4373,8 @@ body.dm-mode .dm-hide { display: none; }
 // Pre-bonus defaults are an even 8s — user adjusts via the stat inputs.
 //   PB cost: 0 each = 0 total. Spend all 27 points to set scores up to a max of 15.
 const BASE_STATS_DEFAULT = { str: 8, dex: 8, con: 8, int: 8, wis: 8, cha: 8 };
-// 2024 Giant Foundling background — player distributes +2/+1 (or +1/+1/+1) across stats
-// at character creation. Default placement honors Kano's Barbarian-first build:
-// STR +2, CON +1. Adjust at the Ability Scores section if the player wants a different split.
-const BG_BONUS = { str: 2, con: 1 };
+// 2024 Sage background — INT +2, WIS +1.
+const BG_BONUS = { int: 2, wis: 1 };
 
 // Per-level data is populated via the Level Up modal (Phase 2) as Rivet chooses
 // her class for each level. Each entry: { class: 'artificer' | 'rogue', subclass: ..., classGain: ..., asi: {...} }.
