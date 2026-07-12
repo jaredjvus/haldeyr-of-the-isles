@@ -4664,7 +4664,64 @@ const SPELLS = [
   { name: "Geas", level: "5th", school: "Enchantment", time: "1 minute", range: "60 feet", components: "V", duration: "30 days" },
   { name: "Greater Restoration", level: "5th", school: "Abjuration", time: "Action", range: "Touch", components: "V, S, M(C*)", duration: "Instantaneous" },
   { name: "Raise Dead", level: "5th", school: "Necromancy", time: "1 hour", range: "Touch", components: "V, S, M(C*)", duration: "Instantaneous" },
-  { name: "Summon Celestial", level: "5th", school: "Conjuration", time: "Action", range: "90 feet", components: "V, S, M(C)", duration: "C, up to 1 hour", concentration: true }
+  { name: "Summon Celestial", level: "5th", school: "Conjuration", time: "Action", range: "90 feet", components: "V, S, M(C)", duration: "C, up to 1 hour", concentration: true },
+
+  // Additional Oath Spells referenced by non-Devotion Sacred Oaths (subclassData expandedSpells)
+  // that weren't otherwise on the base Paladin list. Added so every oath's expanded spells
+  // resolve via findSpellByName() / the prepared-spell picker. Full 2024 PHB text in SPELL_DETAILS.
+  { name: "Alarm", level: "1st", school: "Abjuration", time: "1 minute or R", range: "30 feet", components: "V, S, M", duration: "8 hours" , subclassOnly: true },
+  { name: "Animate Dead", level: "3rd", school: "Necromancy", time: "1 minute", range: "10 feet", components: "V, S, M", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Armor of Agathys", level: "1st", school: "Abjuration", time: "Bonus Action", range: "Self", components: "V, S, M", duration: "1 hour" , subclassOnly: true },
+  { name: "Bane", level: "1st", school: "Enchantment", time: "Action", range: "30 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Beacon of Hope", level: "3rd", school: "Abjuration", time: "Action", range: "30 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Bestow Curse", level: "3rd", school: "Necromancy", time: "Action", range: "Touch", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Blight", level: "4th", school: "Necromancy", time: "Action", range: "30 feet", components: "V, S", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Calm Emotions", level: "2nd", school: "Enchantment", time: "Action", range: "60 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Cloudkill", level: "5th", school: "Conjuration", time: "Action", range: "120 feet", components: "V, S", duration: "C, up to 10 minutes", concentration: true , subclassOnly: true },
+  { name: "Commune", level: "5th", school: "Divination", time: "1 minute or R", range: "Self", components: "V, S, M", duration: "1 minute" , subclassOnly: true },
+  { name: "Commune with Nature", level: "5th", school: "Divination", time: "1 minute or R", range: "Self", components: "V, S", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Compulsion", level: "4th", school: "Enchantment", time: "Action", range: "30 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Confusion", level: "4th", school: "Enchantment", time: "Action", range: "90 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Contagion", level: "5th", school: "Necromancy", time: "Action", range: "Touch", components: "V, S", duration: "7 days" , subclassOnly: true },
+  { name: "Counterspell", level: "3rd", school: "Abjuration", time: "Reaction", range: "60 feet", components: "S", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Crown of Madness", level: "2nd", school: "Enchantment", time: "Action", range: "120 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Darkness", level: "2nd", school: "Evocation", time: "Action", range: "60 feet", components: "V, M", duration: "C, up to 10 minutes", concentration: true , subclassOnly: true },
+  { name: "Dimension Door", level: "4th", school: "Conjuration", time: "Action", range: "500 feet", components: "V", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Dominate Beast", level: "4th", school: "Enchantment", time: "Action", range: "60 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Dominate Person", level: "5th", school: "Enchantment", time: "Action", range: "60 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Enhance Ability", level: "2nd", school: "Transmutation", time: "Action", range: "Touch", components: "V, S, M", duration: "C, up to 1 hour", concentration: true , subclassOnly: true },
+  { name: "Ensnaring Strike", level: "1st", school: "Conjuration", time: "Bonus Action", range: "Self", components: "V", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Fear", level: "3rd", school: "Illusion", time: "Action", range: "Self", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Flame Strike", level: "5th", school: "Evocation", time: "Action", range: "60 feet", components: "V, S, M", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Freedom of Movement", level: "4th", school: "Abjuration", time: "Action", range: "Touch", components: "V, S, M", duration: "1 hour" , subclassOnly: true },
+  { name: "Guardian of Faith", level: "4th", school: "Conjuration", time: "Action", range: "30 feet", components: "V", duration: "8 hours" , subclassOnly: true },
+  { name: "Guiding Bolt", level: "1st", school: "Evocation", time: "Action", range: "120 feet", components: "V, S", duration: "1 round" , subclassOnly: true },
+  { name: "Haste", level: "3rd", school: "Transmutation", time: "Action", range: "30 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Hellish Rebuke", level: "1st", school: "Evocation", time: "Reaction", range: "60 feet", components: "V, S", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Hold Monster", level: "5th", school: "Enchantment", time: "Action", range: "90 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Hold Person", level: "2nd", school: "Enchantment", time: "Action", range: "60 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Hunter's Mark", level: "1st", school: "Divination", time: "Bonus Action", range: "90 feet", components: "V", duration: "C, up to 1 hour", concentration: true , subclassOnly: true },
+  { name: "Hypnotic Pattern", level: "3rd", school: "Illusion", time: "Action", range: "120 feet", components: "S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Ice Storm", level: "4th", school: "Evocation", time: "Action", range: "300 feet", components: "V, S, M", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Inflict Wounds", level: "1st", school: "Necromancy", time: "Action", range: "Touch", components: "V, S", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Legend Lore", level: "5th", school: "Divination", time: "10 minutes", range: "Self", components: "V, S, M(C*)", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Misty Step", level: "2nd", school: "Conjuration", time: "Bonus Action", range: "Self", components: "V", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Moonbeam", level: "2nd", school: "Evocation", time: "Action", range: "120 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Nondetection", level: "3rd", school: "Abjuration", time: "Action", range: "Touch", components: "V, S, M(C*)", duration: "8 hours" , subclassOnly: true },
+  { name: "Otiluke's Resilient Sphere", level: "4th", school: "Abjuration", time: "Action", range: "30 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Plant Growth", level: "3rd", school: "Transmutation", time: "Action or 8 hours", range: "150 feet", components: "V, S", duration: "Instantaneous" , subclassOnly: true },
+  { name: "Protection from Energy", level: "3rd", school: "Abjuration", time: "Action", range: "Touch", components: "V, S", duration: "C, up to 1 hour", concentration: true , subclassOnly: true },
+  { name: "Sanctuary", level: "1st", school: "Abjuration", time: "Bonus Action", range: "30 feet", components: "V, S, M", duration: "1 minute" , subclassOnly: true },
+  { name: "Scrying", level: "5th", school: "Divination", time: "10 minutes", range: "Self", components: "V, S, M(C)", duration: "C, up to 10 minutes", concentration: true , subclassOnly: true },
+  { name: "See Invisibility", level: "2nd", school: "Divination", time: "Action", range: "Self", components: "V, S, M", duration: "1 hour" , subclassOnly: true },
+  { name: "Sleep", level: "1st", school: "Enchantment", time: "Action", range: "60 feet", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Speak with Animals", level: "1st", school: "Divination", time: "Action or R", range: "Self", components: "V, S", duration: "10 minutes" , subclassOnly: true },
+  { name: "Spirit Guardians", level: "3rd", school: "Conjuration", time: "Action", range: "Self", components: "V, S, M", duration: "C, up to 10 minutes", concentration: true , subclassOnly: true },
+  { name: "Spiritual Weapon", level: "2nd", school: "Evocation", time: "Bonus Action", range: "60 feet", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Stoneskin", level: "4th", school: "Transmutation", time: "Action", range: "Touch", components: "V, S, M(C*)", duration: "C, up to 1 hour", concentration: true , subclassOnly: true },
+  { name: "Tree Stride", level: "5th", school: "Conjuration", time: "Action", range: "Self", components: "V, S", duration: "C, up to 1 minute", concentration: true , subclassOnly: true },
+  { name: "Wall of Force", level: "5th", school: "Evocation", time: "Action", range: "120 feet", components: "V, S", duration: "C, up to 10 minutes", concentration: true , subclassOnly: true },
+  { name: "Yolande's Regal Presence", level: "5th", school: "Enchantment", time: "Action", range: "Self", components: "V, S, M", duration: "C, up to 1 minute", concentration: true , subclassOnly: true }
 ];
 
 // Full spell descriptions parsed from dnd2024.wikidot.com per-spell pages.
@@ -4722,7 +4779,62 @@ const SPELL_DETAILS = {
   "Geas": { school: "Enchantment (5th-Level)", desc: "You give a verbal command to a creature that you can see within range, ordering it to carry out some service or refrain from an action or a course of activity as you decide. The target must succeed on a Wisdom saving throw or have the Charmed condition for the duration. The target automatically succeeds if it can’t understand your command.\n\nWhile Charmed, the creature takes 5d10 Psychic damage if it acts in a manner directly counter to your command. It takes this damage no more than once each day.\n\nYou can issue any command you choose, short of an activity that would result in certain death. Should you issue a suicidal command, the spell ends.\n\nA Remove Curse, Greater Restoration, or Wish spell ends this spell.\n\nUsing a Higher-Level Spell Slot. If you use a level 7 or 8 spell slot, the duration is 365 days. If you use a level 9 spell slot, the spell lasts until it is ended by one of the spells mentioned above." },
   "Greater Restoration": { school: "Abjuration (5th-Level)", desc: "You touch a creature and magically remove one of the following effects from it:\n\n1 Exhaustion level\n\nThe Charmed or Petrified condition\n\nA curse, including the target’s Attunement to a cursed magic item\n\nAny reduction to one of the target’s ability scores\n\nAny reduction to the target’s Hit Point maximum" },
   "Raise Dead": { school: "Necromancy (5th-Level)", desc: "With a touch, you revive a dead creature if it has been dead no longer than 10 days and it wasn’t Undead when it died.\n\nThe creature returns to life with 1 Hit Point. This spell also neutralizes any poisons that affected the creature at the time of death.\n\nThis spell closes all mortal wounds, but it doesn’t restore missing body parts. If the creature is lacking body parts or organs integral for its survival - its head, for instance - the spell automatically fails.\n\nComing back from the dead is an ordeal. The target takes a −4 penalty to D20 Tests. Every time the target finishes a Long Rest, the penalty is reduced by 1 until it becomes 0." },
-  "Summon Celestial": { school: "Conjuration (5th-Level) · Concentration", desc: "You call forth a Celestial spirit. It manifests in an angelic form in an unoccupied space that you can see within range and uses the Celestial Spirit stat block. When you cast the spell, choose Avenger or Defender. Your choice determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.\n\nThe creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don’t issue any, it takes the Dodge action and uses its movement to avoid danger.\n\nUsing a Higher-Level Spell Slot. Use the spell slot’s level for the spell’s level in the stat block.\n\nCelestial Spirit\n\nLarge Celestial, Neutral\n\nArmor Class: 11 + the spell’s level + 2 (Defender only)\n\nHit Points: 40 + 10 for each spell level above 5\n\nSpeed: 30 ft., Fly 40 ft.\n\nSTR (Mod/Save)\n\nDEX (Mod/Save)\n\nCON (Mod/Save)\n\nINT (Mod/Save)\n\nWIS (Mod/Save)\n\nCHA (Mod/Save)\n\n16 (+3/+3)\n\n14 (+2/+2)\n\n16 (+3/+3)\n\n10 (+0/+0)\n\n14 (+2/+2)\n\n16 (+3/+3)\n\nResistances: Radiant\n\nImmunities: Charmed, Frightened\n\nSenses: Darkvision 60 ft., Passive Perception 12\n\nLanguages: Celestial, understands the languages you know\n\nChallenge Rating: None (XP 0; PB equals your Proficiency Bonus)\n\nActions\n\nMultiattack. The spirit makes a number of attacks equal to half this spell’s level (round down).\n\nRadiant Bow (Avenger Only). Ranged Attack Roll: Bonus equals your spell attack modifier, range 600 ft. Hit: 2d6 + 2 + the spell’s level Radiant damage.\n\nRadiant Mace (Defender Only). Melee Attack Roll: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d10 + 3 + the spell’s level Radiant damage, and the spirit can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains 1d10 Temporary Hit Points.\n\nHealing Touch (1/Day). The spirit touches another creature. The target regains Hit Points equal to 2d8 + the spell’s level." }
+  "Summon Celestial": { school: "Conjuration (5th-Level) · Concentration", desc: "You call forth a Celestial spirit. It manifests in an angelic form in an unoccupied space that you can see within range and uses the Celestial Spirit stat block. When you cast the spell, choose Avenger or Defender. Your choice determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.\n\nThe creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don’t issue any, it takes the Dodge action and uses its movement to avoid danger.\n\nUsing a Higher-Level Spell Slot. Use the spell slot’s level for the spell’s level in the stat block.\n\nCelestial Spirit\n\nLarge Celestial, Neutral\n\nArmor Class: 11 + the spell’s level + 2 (Defender only)\n\nHit Points: 40 + 10 for each spell level above 5\n\nSpeed: 30 ft., Fly 40 ft.\n\nSTR (Mod/Save)\n\nDEX (Mod/Save)\n\nCON (Mod/Save)\n\nINT (Mod/Save)\n\nWIS (Mod/Save)\n\nCHA (Mod/Save)\n\n16 (+3/+3)\n\n14 (+2/+2)\n\n16 (+3/+3)\n\n10 (+0/+0)\n\n14 (+2/+2)\n\n16 (+3/+3)\n\nResistances: Radiant\n\nImmunities: Charmed, Frightened\n\nSenses: Darkvision 60 ft., Passive Perception 12\n\nLanguages: Celestial, understands the languages you know\n\nChallenge Rating: None (XP 0; PB equals your Proficiency Bonus)\n\nActions\n\nMultiattack. The spirit makes a number of attacks equal to half this spell’s level (round down).\n\nRadiant Bow (Avenger Only). Ranged Attack Roll: Bonus equals your spell attack modifier, range 600 ft. Hit: 2d6 + 2 + the spell’s level Radiant damage.\n\nRadiant Mace (Defender Only). Melee Attack Roll: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d10 + 3 + the spell’s level Radiant damage, and the spirit can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains 1d10 Temporary Hit Points.\n\nHealing Touch (1/Day). The spirit touches another creature. The target regains Hit Points equal to 2d8 + the spell’s level." },
+
+  // Additional Oath Spells referenced by non-Devotion Sacred Oaths (see SPELLS array above for the matching metadata entries)
+  "Alarm": { school: "Abjuration (1st-Level)", desc: "You set an alarm against intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot Cube. Until the spell ends, an alarm alerts you whenever a creature touches or enters the warded area. When you cast the spell, you can designate creatures that won’t set off the alarm. You also choose whether the alarm is audible or mental:\n\nAudible Alarm. The alarm produces the sound of a handbell for 10 seconds within 60 feet of the warded area.\n\nMental Alarm. You are alerted by a mental ping if you are within 1 mile of the warded area. This ping awakens you if you’re asleep." },
+  "Animate Dead": { school: "Necromancy (3rd-Level)", desc: "Choose a pile of bones or a corpse of a Medium or Small Humanoid within range. The target becomes an Undead creature: a Skeleton if you chose bones or a Zombie if you chose a corpse (see appendix B for the stat blocks).\n\nOn each of your turns, you can take a Bonus Action to mentally command any creature you made with this spell if the creature is within 60 feet of you (if you control multiple creatures, you can command any of them at the same time, issuing the same command to each one). You decide what action the creature will take and where it will move on its next turn, or you can issue a general command, such as to guard a chamber or corridor. If you issue no commands, the creature takes the Dodge action and moves only to avoid harm. Once given an order, the creature continues to follow it until its task is complete.\n\nThe creature is under your control for 24 hours, after which it stops obeying any command you’ve given it. To maintain control of the creature for another 24 hours, you must cast this spell on the creature again before the current 24-hour period ends. This use of the spell reasserts your control over up to four creatures you have animated with this spell rather than animating a new creature.\n\nUsing a Higher-Level Spell Slot. You animate or reassert control over two additional Undead creatures for each spell slot level above 3. Each of the creatures must come from a different corpse or pile of bones." },
+  "Armor of Agathys": { school: "Abjuration (1st-Level)", desc: "Protective magical frost surrounds you. You gain 5 Temporary Hit Points. If a creature hits you with a melee attack roll before the spell ends, the creature takes 5 Cold damage. The spell ends early if you have no Temporary Hit Points.\n\nUsing a Higher-Level Spell Slot. The Temporary Hit Points and the Cold damage both increase by 5 for each spell slot level above 1." },
+  "Bane": { school: "Enchantment (1st-Level) · Concentration", desc: "Up to three creatures of your choice that you can see within range must each make a Charisma saving throw. Whenever a target that fails this save makes an attack roll or a saving throw before the spell ends, the target must subtract 1d4 from the attack roll or save.\n\nUsing a Higher-Level Spell Slot. You can target one additional creature for each spell slot level above 1." },
+  "Beacon of Hope": { school: "Abjuration (3rd-Level) · Concentration", desc: "Choose any number of creatures within range. For the duration, each target has Advantage on Wisdom saving throws and Death Saving Throws and regains the maximum number of Hit Points possible from any healing." },
+  "Bestow Curse": { school: "Necromancy (3rd-Level) · Concentration", desc: "You touch a creature, which must succeed on a Wisdom saving throw or become cursed for the duration. Until the curse ends, the target suffers one of the following effects of your choice:\n\nChoose one ability. The target has Disadvantage on ability checks and saving throws made with that ability.\n\nThe target has Disadvantage on attack rolls against you.\n\nIn combat, the target must succeed on a Wisdom saving throw at the start of each of its turns or be forced to take the Dodge action on that turn.\n\nIf you deal damage to the target with an attack roll or a spell, the target takes an extra 1d8 Necrotic damage.\n\nUsing a Higher-Level Spell Slot. If you cast this spell using a level 4 spell slot, you can maintain Concentration on it for up to 10 minutes. If you use a level 5+ spell slot, the spell doesn't require Concentration, and the duration becomes 8 hours (level 5–6 slot) or 24 hours (level 7–8 slot). If you use a level 9 spell slot, the spell lasts until dispelled." },
+  "Blight": { school: "Necromancy (4th-Level)", desc: "A creature that you can see within range makes a Constitution saving throw, taking 8d8 Necrotic damage on a failed save or half as much damage on a successful one. A Plant creature automatically fails the save.\n\nAlternatively, target a nonmagical plant that isn’t a creature, such as a tree or shrub. It doesn’t make a save; it simply withers and dies.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d8 for each spell slot level above 4." },
+  "Calm Emotions": { school: "Enchantment (2nd-Level) · Concentration", desc: "Each Humanoid in a 20-foot-radius Sphere centered on a point you choose within range must succeed on a Charisma saving throw or be affected by one of the following effects (choose for each creature):\n\nThe creature has Immunity to the Charmed and Frightened conditions until the spell ends. If the creature was already Charmed or Frightened, those conditions are suppressed for the duration.\n\nThe creature becomes Indifferent about creatures of your choice that it’s Hostile toward. This indifference ends if the target takes damage or witnesses its allies taking damage. When the spell ends, the creature’s attitude returns to normal." },
+  "Cloudkill": { school: "Conjuration (5th-Level) · Concentration", desc: "You create a 20-foot-radius Sphere of yellow-green fog centered on a point within range. The fog lasts for the duration or until strong wind (such as the one created by Gust of Wind) disperses it, ending the spell. Its area is Heavily Obscured.\n\nEach creature in the Sphere makes a Constitution saving throw, taking 5d8 Poison damage on a failed save or half as much damage on a successful one. A creature must also make this save when the Sphere moves into its space and when it enters the Sphere or ends its turn there. A creature makes this save only once per turn.\n\nThe Sphere moves 10 feet away from you at the start of each of your turns.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d8 for each spell slot level above 5." },
+  "Commune": { school: "Divination (5th-Level)", desc: "You contact a deity or a divine proxy and ask up to three questions that can be answered with yes or no. You must ask your questions before the spell ends. You receive a correct answer for each question.\n\nDivine beings aren't necessarily omniscient, so you might receive “unclear” as an answer if a question pertains to information that lies beyond the deity’s knowledge. In a case where a one-word answer could be misleading or contrary to the deity’s interests, the DM might offer a short phrase as an answer instead.\n\nIf you cast the spell more than once before finishing a Long Rest, there is a cumulative 25 percent chance for each casting after the first that you get no answer." },
+  "Commune with Nature": { school: "Divination (5th-Level)", desc: "You commune with nature spirits and gain knowledge of the surrounding area. In the outdoors, the spell gives you knowledge of the area within 3 miles of you. In caves and other natural underground settings, the radius is limited to 300 feet. The spell doesn't function where nature has been replaced by construction, such as in castles and settlements.\n\nChoose three of the following facts; you learn those facts as they pertain to the spell's area: locations of settlements; locations of portals to other planes of existence; the location of one Challenge Rating 10+ creature (DM’s choice) that is a Celestial, an Elemental, a Fey, a Fiend, or an Undead; the most prevalent kind of plant, mineral, or Beast (you choose which to learn); locations of bodies of water.\n\nFor example, you could determine the location of a powerful monster in the area, the locations of bodies of water, and the locations of any towns." },
+  "Compulsion": { school: "Enchantment (4th-Level) · Concentration", desc: "Each creature of your choice that you can see within range must succeed on a Wisdom saving throw or have the Charmed condition until the spell ends.\n\nFor the duration, you can take a Bonus Action to designate a direction that is horizontal to you. Each Charmed target must use as much of its movement as possible to move in that direction on its next turn, taking the safest route. After moving in this way, a target repeats the save, ending the spell on itself on a success." },
+  "Confusion": { school: "Enchantment (4th-Level) · Concentration", desc: "Each creature in a 10-foot-radius Sphere centered on a point you choose within range must succeed on a Wisdom saving throw, or that target can’t take Bonus Actions or Reactions and must roll 1d10 at the start of each of its turns to determine its behavior for that turn, consulting the table below.\n\n1. The target doesn’t take an action, and it uses all its movement to move. Roll 1d4 for the direction: 1, north; 2, east; 3, south; or 4, west.\n2–6. The target doesn’t move or take actions.\n7–8. The target doesn’t move, and it takes the Attack action to make one melee attack against a random creature within reach. If none are within reach, the target takes no action.\n9–10. The target chooses its behavior.\n\nAt the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success.\n\nUsing a Higher-Level Spell Slot. The Sphere’s radius increases by 5 feet for each spell slot level above 4." },
+  "Contagion": { school: "Necromancy (5th-Level)", desc: "Your touch inflicts a magical contagion. The target must succeed on a Constitution saving throw or take 11d8 Necrotic damage and have the Poisoned condition. Also, choose one ability when you cast the spell. While Poisoned, the target has Disadvantage on saving throws made with the chosen ability.\n\nThe target must repeat the saving throw at the end of each of its turns until it gets three successes or failures. If the target succeeds on three of these saves, the spell ends on the target. If the target fails three of the saves, the spell lasts for 7 days on it.\n\nWhenever the Poisoned target receives an effect that would end the Poisoned condition, the target must succeed on a Constitution saving throw, or the Poisoned condition doesn’t end on it." },
+  "Counterspell": { school: "Abjuration (3rd-Level)", desc: "You attempt to interrupt a creature in the process of casting a spell. The creature makes a Constitution saving throw. On a failed save, the spell dissipates with no effect, and the action, Bonus Action, or Reaction used to cast it is wasted. If that spell was cast with a spell slot, the slot isn’t expended." },
+  "Crown of Madness": { school: "Enchantment (2nd-Level) · Concentration", desc: "One creature that you can see within range must succeed on a Wisdom saving throw or have the Charmed condition for the duration. The creature succeeds automatically if it isn’t Humanoid.\n\nA spectral crown appears on the Charmed target's head, and it must use its action before moving on each of its turns to make a melee attack against a creature other than itself that you mentally choose. The target can act normally on its turn if you choose no creature or if no creature is within its reach. The target repeats the save at the end of each of its turns, ending the spell on itself on a success.\n\nOn your later turns, you must take the Magic action to maintain control of the target, or the spell ends." },
+  "Darkness": { school: "Evocation (2nd-Level) · Concentration", desc: "For the duration, magical Darkness spreads from a point within range and fills a 15-foot-radius Sphere. Darkvision can’t see through it, and nonmagical light can’t illuminate it.\n\nAlternatively, you cast the spell on an object that isn’t being worn or carried, causing the Darkness to fill a 15-foot Emanation originating from that object. Covering that object with something opaque, such as a bowl or helm, blocks the Darkness.\n\nIf any of this spell’s area overlaps with an area of Bright Light or Dim Light created by a spell of level 2 or lower, that other spell is dispelled." },
+  "Dimension Door": { school: "Conjuration (4th-Level)", desc: "You teleport to a location within range. You arrive at exactly the spot desired. It can be a place you can see, one you can visualize, or one you can describe by stating distance and direction, such as “200 feet straight downward” or “300 feet upward to the northwest at a 45-degree angle.”\n\nYou can also teleport one willing creature. The creature must be within 5 feet of you when you teleport, and it teleports to a space within 5 feet of your destination space.\n\nIf you, the other creature, or both would arrive in a space occupied by a creature or completely filled by one or more objects, you and any creature traveling with you each take 4d6 Force damage, and the teleportation fails." },
+  "Dominate Beast": { school: "Enchantment (4th-Level) · Concentration", desc: "One Beast you can see within range must succeed on a Wisdom saving throw or have the Charmed condition for the duration. The target has Advantage on the save if you or your allies are fighting it. Whenever the target takes damage, it repeats the save, ending the spell on itself on a success.\n\nYou have a telepathic link with the Charmed target while the two of you are on the same plane of existence. On your turn, you can use this link to issue commands to the target (no action required), such as “Attack that creature,” “Move over there,” or “Fetch that object.” The target does its best to obey on its turn. If it completes an order and doesn’t receive further direction from you, it acts and moves as it likes, focusing on protecting itself.\n\nYou can command the target to take a Reaction but must take your own Reaction to do so.\n\nUsing a Higher-Level Spell Slot. Your Concentration can last longer with a spell slot of level 5 (up to 10 minutes), 6 (up to 1 hour), or 7+ (up to 8 hours)." },
+  "Dominate Person": { school: "Enchantment (5th-Level) · Concentration", desc: "One Humanoid you can see within range must succeed on a Wisdom saving throw or have the Charmed condition for the duration. The target has Advantage on the save if you or your allies are fighting it. Whenever the target takes damage, it repeats the save, ending the spell on itself on a success.\n\nYou have a telepathic link with the Charmed target while the two of you are on the same plane of existence. On your turn, you can use this link to issue commands to the target (no action required), such as “Attack that creature,” “Move over there,” or “Fetch that object.” The target does its best to obey on its turn. If it completes an order and doesn’t receive further direction from you, it acts and moves as it likes, focusing on protecting itself.\n\nYou can command the target to take a Reaction but must take your own Reaction to do so.\n\nUsing a Higher-Level Spell Slot. Your Concentration can last longer with a spell slot of level 6 (up to 10 minutes), 7 (up to 1 hour), or 8+ (up to 8 hours)." },
+  "Enhance Ability": { school: "Transmutation (2nd-Level) · Concentration", desc: "You touch a creature and choose Strength, Dexterity, Intelligence, Wisdom, or Charisma. For the duration, the target has Advantage on ability checks using the chosen ability.\n\nUsing a Higher-Level Spell Slot. You can target one additional creature for each spell slot level above 2. You can choose a different ability for each target." },
+  "Ensnaring Strike": { school: "Conjuration (1st-Level) · Concentration", desc: "As you hit the target, grasping vines appear on it, and it makes a Strength saving throw. A Large or larger creature has Advantage on this save. On a failed save, the target has the Restrained condition until the spell ends. On a successful save, the vines shrivel away, and the spell ends.\n\nWhile Restrained, the target takes 1d6 Piercing damage at the start of each of its turns. The target or a creature within reach of it can take an action to make a Strength (Athletics) check against your spell save DC. On a success, the spell ends.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d6 for each spell slot level above 1." },
+  "Fear": { school: "Illusion (3rd-Level) · Concentration", desc: "Each creature in a 30-foot Cone must succeed on a Wisdom saving throw or drop whatever it is holding and have the Frightened condition for the duration.\n\nA Frightened creature takes the Dash action and moves away from you by the safest route on each of its turns unless there is nowhere to move. If the creature ends its turn in a space where it doesn’t have line of sight to you, the creature makes a Wisdom saving throw. On a successful save, the spell ends on that creature." },
+  "Flame Strike": { school: "Evocation (5th-Level)", desc: "A vertical column of brilliant fire roars down from above. Each creature in a 10-foot-radius, 40-foot-high Cylinder centered on a point within range makes a Dexterity saving throw, taking 5d6 Fire damage and 5d6 Radiant damage on a failed save or half as much damage on a successful one.\n\nUsing a Higher-Level Spell Slot. The Fire damage and the Radiant damage increase by 1d6 for each spell slot level above 5." },
+  "Freedom of Movement": { school: "Abjuration (4th-Level)", desc: "You touch a willing creature. For the duration, the target’s movement is unaffected by Difficult Terrain, and spells and other magical effects can neither reduce the target’s Speed nor cause the target to have the Paralyzed or Restrained conditions. The target also has a Swim Speed equal to its Speed.\n\nIn addition, the target can spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature imposing the Grappled condition on it.\n\nUsing a Higher-Level Spell Slot. You can target one additional creature for each spell slot level above 4." },
+  "Guardian of Faith": { school: "Conjuration (4th-Level)", desc: "A Large spectral guardian appears and hovers for the duration in an unoccupied space that you can see within range. The guardian occupies that space and is invulnerable, and it appears in a form appropriate for your deity or pantheon.\n\nAny enemy that moves to a space within 10 feet of the guardian for the first time on a turn or starts its turn there makes a Dexterity saving throw, taking 20 Radiant damage on a failed save or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage." },
+  "Guiding Bolt": { school: "Evocation (1st-Level)", desc: "You hurl a bolt of light toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 4d6 Radiant damage, and the next attack roll made against it before the end of your next turn has Advantage.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d6 for each spell slot level above 1." },
+  "Haste": { school: "Transmutation (3rd-Level) · Concentration", desc: "Choose a willing creature that you can see within range. Until the spell ends, the target’s Speed is doubled, it gains a +2 bonus to Armor Class, it has Advantage on Dexterity saving throws, and it gains an additional action on each of its turns. That action can be used to take only the Attack (one attack only), Dash, Disengage, Hide, or Utilize action.\n\nWhen the spell ends, the target is Incapacitated and has a Speed of 0 until the end of its next turn, as a wave of lethargy washes over it." },
+  "Hellish Rebuke": { school: "Evocation (1st-Level)", desc: "The creature that damaged you is momentarily surrounded by green flames. It makes a Dexterity saving throw, taking 2d10 Fire damage on a failed save or half as much damage on a successful one.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d10 for each spell slot level above 1." },
+  "Hold Monster": { school: "Enchantment (5th-Level) · Concentration", desc: "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or have the Paralyzed condition for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success.\n\nUsing a Higher-Level Spell Slot. You can target one additional creature for each spell slot level above 5." },
+  "Hold Person": { school: "Enchantment (2nd-Level) · Concentration", desc: "Choose a Humanoid that you can see within range. The target must succeed on a Wisdom saving throw or have the Paralyzed condition for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success.\n\nUsing a Higher-Level Spell Slot. You can target one additional Humanoid for each spell slot level above 2." },
+  "Hunter's Mark": { school: "Divination (1st-Level) · Concentration", desc: "You magically mark one creature you can see within range as your quarry. Until the spell ends, you deal an extra 1d6 Force damage to the target whenever you hit it with an attack roll. You also have Advantage on any Wisdom (Perception or Survival) check you make to find it.\n\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action to move the mark to a new creature you can see within range.\n\nUsing a Higher-Level Spell Slot. Your Concentration can last longer with a spell slot of level 3–4 (up to 8 hours) or 5+ (up to 24 hours)." },
+  "Hypnotic Pattern": { school: "Illusion (3rd-Level) · Concentration", desc: "You create a twisting pattern of colors in a 30-foot Cube within range. The pattern appears for a moment and vanishes. Each creature in the area who can see the pattern must succeed on a Wisdom saving throw or have the Charmed condition for the duration. While Charmed, the creature has the Incapacitated condition and a Speed of 0.\n\nThe spell ends for an affected creature if it takes any damage or if someone else uses an action to shake the creature out of its stupor." },
+  "Ice Storm": { school: "Evocation (4th-Level)", desc: "Hail falls in a 20-foot-radius, 40-foot-high Cylinder centered on a point within range. Each creature in the Cylinder makes a Dexterity saving throw. A creature takes 2d10 Bludgeoning damage and 4d6 Cold damage on a failed save or half as much damage on a successful one.\n\nHailstones turn ground in the Cylinder into Difficult Terrain until the end of your next turn.\n\nUsing a Higher-Level Spell Slot. The Bludgeoning damage increases by 1d10 for each spell slot level above 4." },
+  "Inflict Wounds": { school: "Necromancy (1st-Level)", desc: "A creature you touch makes a Constitution saving throw, taking 2d10 Necrotic damage on a failed save or half as much damage on a successful one.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d10 for each spell slot level above 1." },
+  "Legend Lore": { school: "Divination (5th-Level)", desc: "Name or describe a famous person, place, or object. The spell brings to your mind a brief summary of the significant lore about that famous thing, as described by the DM.\n\nThe lore might consist of important details, amusing revelations, or even secret lore that has never been widely known. The more information you already know about the thing, the more precise and detailed the information you receive is. That information is accurate but might be couched in figurative language or poetry, as determined by the DM.\n\nIf the famous thing you chose isn’t actually famous, you hear sad musical notes played on a trombone, and the spell fails." },
+  "Misty Step": { school: "Conjuration (2nd-Level)", desc: "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space you can see." },
+  "Moonbeam": { school: "Evocation (2nd-Level) · Concentration", desc: "A silvery beam of pale light shines down in a 5-foot-radius, 40-foot-high Cylinder centered on a point within range. Until the spell ends, Dim Light fills the Cylinder, and you can take a Magic action on later turns to move the Cylinder up to 60 feet.\n\nWhen the Cylinder appears, each creature in it makes a Constitution saving throw. On a failed save, a creature takes 2d10 Radiant damage, and if the creature is shape-shifted (as a result of the Polymorph spell, for example), it reverts to its true form and can’t shape-shift until it leaves the Cylinder. On a successful save, a creature takes half as much damage only. A creature also makes this save when the spell’s area moves into its space and when it enters the spell’s area or ends its turn there. A creature makes this save only once per turn.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d10 for each spell slot level above 2." },
+  "Nondetection": { school: "Abjuration (3rd-Level)", desc: "For the duration, you hide a target that you touch from Divination spells. The target can be a willing creature, or it can be a place or an object no larger than 10 feet in any dimension. The target can’t be targeted by any Divination spell or perceived through magical scrying sensors." },
+  "Otiluke's Resilient Sphere": { school: "Abjuration (4th-Level) · Concentration", desc: "A shimmering sphere encloses a Large or smaller creature or object within range. An unwilling creature must succeed on a Dexterity saving throw or be enclosed for the duration.\n\nNothing—not physical objects, energy, or other spell effects—can pass through the barrier, in or out, though a creature in the sphere can breathe there. The sphere is immune to all damage, and a creature or object inside can’t be damaged by attacks or effects originating from outside, nor can a creature inside the sphere damage anything outside it.\n\nThe sphere is weightless and just large enough to contain the creature or object inside. An enclosed creature can take an action to push against the sphere’s walls and thus roll the sphere at up to half the creature’s Speed. Similarly, the globe can be picked up and moved by other creatures.\n\nA Disintegrate spell targeting the globe destroys it without harming anything inside." },
+  "Plant Growth": { school: "Transmutation (3rd-Level)", desc: "This spell channels vitality into plants. The casting time you use determines whether the spell has the Overgrowth or the Enrichment effect below.\n\nOvergrowth. Choose a point within range. All normal plants in a 100-foot-radius Sphere centered on that point become thick and overgrown. A creature moving through that area must spend 4 feet of movement for every 1 foot it moves. You can exclude one or more areas of any size within the spell’s area from being affected.\n\nEnrichment. All plants in a half-mile radius centered on a point within range become enriched for 365 days. The plants yield twice the normal amount of food when harvested. They can benefit from only one Plant Growth per year." },
+  "Protection from Energy": { school: "Abjuration (3rd-Level) · Concentration", desc: "For the duration, the willing creature you touch has Resistance to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder." },
+  "Sanctuary": { school: "Abjuration (1st-Level)", desc: "You ward a creature within range. Until the spell ends, any creature who targets the warded creature with an attack roll or a damaging spell must succeed on a Wisdom saving throw or either choose a new target or lose the attack or spell. This spell doesn’t protect the warded creature from areas of effect.\n\nThe spell ends if the warded creature makes an attack roll, casts a spell, or deals damage." },
+  "Scrying": { school: "Divination (5th-Level) · Concentration", desc: "You can see and hear a creature you choose that is on the same plane of existence as you. The target makes a Wisdom saving throw, which is modified (see below) by how well you know the target and the sort of physical connection you have to it. The target doesn’t know what it is making the save against, only that it feels uneasy.\n\nYour Knowledge of the Target: Secondhand (heard of the target) +5; Firsthand (met the target) +0; Extensive (know the target well) −5.\nYou Have the Target’s: Picture or other likeness −2; Garment or other possession −4; Body part, lock of hair, or bit of nail −10.\n\nOn a successful save, the target isn’t affected, and you can’t use this spell on it again for 24 hours.\n\nOn a failed save, the spell creates an Invisible, intangible sensor within 10 feet of the target. You can see and hear through the sensor as if you were there. The sensor moves with the target, remaining within 10 feet of it for the duration. If something can see the sensor, it appears as a luminous orb about the size of your fist.\n\nInstead of targeting a creature, you can target a location you have seen. When you do so, the sensor appears at that location and doesn’t move." },
+  "See Invisibility": { school: "Divination (2nd-Level)", desc: "For the duration, you see creatures and objects that have the Invisible condition as if they were visible, and you can see into the Ethereal Plane. Creatures and objects there appear ghostly." },
+  "Sleep": { school: "Enchantment (1st-Level) · Concentration", desc: "Each creature of your choice in a 5-foot-radius Sphere centered on a point within range must succeed on a Wisdom saving throw or have the Incapacitated condition until the end of its next turn, at which point it must repeat the save. If the target fails the second save, the target has the Unconscious condition for the duration. The spell ends on a target if it takes damage or someone within 5 feet of it takes an action to shake it out of the spell’s effect.\n\nCreatures that don’t sleep, such as elves, or that have Immunity to the Exhaustion condition automatically succeed on saves against this spell." },
+  "Speak with Animals": { school: "Divination (1st-Level)", desc: "For the duration, you can comprehend and verbally communicate with Beasts, and you can use any of the Influence action’s skill options with them.\n\nMost Beasts have little to say about topics that don’t pertain to survival or companionship, but at minimum, a Beast can give you information about nearby locations and monsters, including whatever it has perceived within the past day." },
+  "Spirit Guardians": { school: "Conjuration (3rd-Level) · Concentration", desc: "Protective spirits flit around you in a 15-foot Emanation for the duration. If you are good or neutral, their spectral form appears angelic or fey (your choice). If you are evil, they appear fiendish.\n\nWhen you cast this spell, you can designate creatures to be unaffected by it. Any other creature’s Speed is halved in the Emanation, and whenever the Emanation enters a creature’s space and whenever a creature enters the Emanation or ends its turn there, the creature must make a Wisdom saving throw. On a failed save, the creature takes 3d8 Radiant damage (if you are good or neutral) or 3d8 Necrotic damage (if you are evil). On a successful save, the creature takes half as much damage. A creature makes this save only once per turn.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d8 for each spell slot level above 3." },
+  "Spiritual Weapon": { school: "Evocation (2nd-Level) · Concentration", desc: "You create a floating, spectral force that resembles a weapon of your choice and lasts for the duration. The force appears within range in a space of your choice, and you can immediately make one melee spell attack against one creature within 5 feet of the force. On a hit, the target takes Force damage equal to 1d8 plus your spellcasting ability modifier.\n\nAs a Bonus Action on your later turns, you can move the force up to 20 feet and repeat the attack against a creature within 5 feet of it.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d8 for every slot level above 2." },
+  "Stoneskin": { school: "Transmutation (4th-Level) · Concentration", desc: "Until the spell ends, one willing creature you touch has Resistance to Bludgeoning, Piercing, and Slashing damage." },
+  "Tree Stride": { school: "Conjuration (5th-Level) · Concentration", desc: "You gain the ability to enter a tree and move from inside it to inside another tree of the same kind within 500 feet. Both trees must be living and at least the same size as you. You must use 5 feet of movement to enter a tree. You instantly know the location of all other trees of the same kind within 500 feet and, as part of the move used to enter the tree, can either pass into one of those trees or step out of the tree you’re in. You appear in a spot of your choice within 5 feet of the destination tree, using another 5 feet of movement. If you have no movement left, you appear within 5 feet of the tree you entered.\n\nYou can use this transportation ability only once on each of your turns. You must end each turn outside a tree." },
+  "Wall of Force": { school: "Evocation (5th-Level) · Concentration", desc: "An Invisible wall of force springs into existence at a point you choose within range. The wall appears in any orientation you choose, as a horizontal or vertical barrier or at an angle. It can be free floating or resting on a solid surface. You can form it into a hemispherical dome or a globe with a radius of up to 10 feet, or you can shape a flat surface made up of ten 10-foot-by-10-foot panels. Each panel must be contiguous with another panel. In any form, the wall is 1/4 inch thick and lasts for the duration. If the wall cuts through a creature’s space when it appears, the creature is pushed to one side of the wall (you choose which side).\n\nNothing can physically pass through the wall. It is immune to all damage and can’t be dispelled by Dispel Magic. A Disintegrate spell destroys the wall instantly, however. The wall also extends into the Ethereal Plane and blocks ethereal travel through the wall." },
+  "Yolande's Regal Presence": { school: "Enchantment (5th-Level) · Concentration", desc: "You surround yourself with unearthly majesty in a 10-foot Emanation. Whenever the Emanation enters the space of a creature you can see and whenever a creature you can see enters the Emanation or ends its turn there, you can force that creature to make a Wisdom saving throw. On a failed save, the target takes 4d6 Psychic damage and has the Prone condition, and you can push it up to 10 feet away. On a successful save, the target takes half as much damage only. A creature makes this save only once per turn." }
 };
 
 
@@ -5684,7 +5796,7 @@ const CLASS_DATA = {
           5:  [{ name: 'Warding Bond', level: '2nd' }, { name: 'Zone of Truth', level: '2nd' }],
           9:  [{ name: 'Aura of Vitality', level: '3rd' }, { name: 'Spirit Guardians', level: '3rd' }],
           13: [{ name: 'Banishment', level: '4th' }, { name: 'Guardian of Faith', level: '4th' }],
-          17: [{ name: 'Circle of Power', level: '5th' }, { name: 'Geas', level: '5th' }]
+          17: [{ name: 'Circle Of Power', level: '5th' }, { name: 'Geas', level: '5th' }]
         },
         channelDivinity: [
           { name: 'Champion Challenge', action: 'Bonus Action', desc: 'Each creature of your choice within 30 ft makes a WIS save. On a fail, the creature can\'t willingly move more than 30 ft away from you. Ends on the creature if you are Incapacitated/die, or if it ever ends up >30 ft away.' },
@@ -6038,6 +6150,9 @@ const DEFAULT_STATE = {
   paladinsSmiteUsed: false,
   // Faithful Steed (Find Steed free cast at L5+ — 1/LR)
   faithfulSteedUsed: false,
+  // Wood Elf Lineage free spells — Longstrider (char L3+) / Pass without Trace (char L5+) — 1/LR each
+  longstriderCastUsed: false,
+  passWithoutTraceCastUsed: false,
   // Subclass capstone (Holy Nimbus / Avenging Angel / etc.) — 1/LR
   oathCapstoneUsed: false,
   // Per-oath one-shot trackers (Undying Sentinel L15 Ancients, etc.)
@@ -6735,6 +6850,19 @@ function renderCombatResources(level) {
         render();
       });
       dynRows.appendChild(psRow);
+
+      // Divine Smite — spend an ordinary paladin spell slot (any remaining 1st-5th).
+      // 2d8 Radiant, +1d8 per slot level above 1st, +1d8 more if the target is a
+      // Fiend or Undead. Lets a player smite as often as they have slots, not just
+      // the 1/LR free use above, without needing to look up the damage table.
+      const dsRow = document.createElement('div');
+      dsRow.className = 'resource-row';
+      dsRow.innerHTML = `
+        <span class="resource-label has-tip" title="Divine Smite: on a melee weapon hit, expend any available spell slot (1st-5th). 2d8 Radiant, +1d8 per slot level above 1st, +1d8 more vs Fiend/Undead.">Divine Smite <span class="resource-meta">spend a slot · 2d8 + 1d8/lvl</span></span>
+        <button class="rage-btn" id="divine-smite-slot-btn">Spend Slot…</button>
+      `;
+      dsRow.querySelector('#divine-smite-slot-btn').addEventListener('click', (e) => openDivineSmitePopover(e.currentTarget));
+      dynRows.appendChild(dsRow);
     }
 
     // Faithful Steed free cast (L5+, 1/LR)
@@ -6752,6 +6880,41 @@ function renderCombatResources(level) {
         render();
       });
       dynRows.appendChild(fsRow);
+    }
+
+    // Wood Elf Lineage free spells — Longstrider (char L3) and Pass without
+    // Trace (char L5), each castable 1/Long Rest without a slot per the 2024
+    // PHB Elven Lineage table. Mirrors the Paladin's Smite / Faithful Steed
+    // free-cast pattern above.
+    if (level >= 3) {
+      const lsRow = document.createElement('div');
+      lsRow.className = 'resource-row';
+      const used = !!state.longstriderCastUsed;
+      lsRow.innerHTML = `
+        <span class="resource-label has-tip" title="Wood Elf Lineage: cast Longstrider once per Long Rest without expending a spell slot (WIS-based).">Longstrider <span class="resource-meta">1/LR · Wood Elf Lineage</span></span>
+        <button class="rage-btn ${used ? 'used' : ''}" id="longstrider-btn"${used ? ' disabled' : ''}>${used ? 'Used' : 'Cast Free'}</button>
+      `;
+      lsRow.querySelector('#longstrider-btn').addEventListener('click', () => {
+        state.longstriderCastUsed = true;
+        saveState();
+        render();
+      });
+      dynRows.appendChild(lsRow);
+    }
+    if (level >= 5) {
+      const pwtRow = document.createElement('div');
+      pwtRow.className = 'resource-row';
+      const used = !!state.passWithoutTraceCastUsed;
+      pwtRow.innerHTML = `
+        <span class="resource-label has-tip" title="Wood Elf Lineage: cast Pass without Trace once per Long Rest without expending a spell slot (WIS-based).">Pass without Trace <span class="resource-meta">1/LR · Wood Elf Lineage</span></span>
+        <button class="rage-btn ${used ? 'used' : ''}" id="pass-without-trace-btn"${used ? ' disabled' : ''}>${used ? 'Used' : 'Cast Free'}</button>
+      `;
+      pwtRow.querySelector('#pass-without-trace-btn').addEventListener('click', () => {
+        state.passWithoutTraceCastUsed = true;
+        saveState();
+        render();
+      });
+      dynRows.appendChild(pwtRow);
     }
 
     // Aura of Protection (L6+, passive)
@@ -7897,7 +8060,12 @@ function renderMagicCard(level) {
   preparedList.innerHTML = '';
   let userPrepared = (state.preparedSpells || []).map(name => ({ spell: findSpellByName(name), always: false })).filter(x => x.spell);
   if (_spellSearch) userPrepared = userPrepared.filter(x => (x.spell.name || '').toLowerCase().includes(_spellSearch) || (x.spell.school || '').toLowerCase().includes(_spellSearch));
-  const all = [...userPrepared];
+  // Paladin Oath Spells — always prepared, don't count against the total, and
+  // aren't stored in state.preparedSpells (they're automatic, not a player pick).
+  const userPreparedNames = new Set(userPrepared.map(x => x.spell.name));
+  let oathPrepared = palData ? getOathSpellsFor(p).filter(s => !userPreparedNames.has(s.name)).map(spell => ({ spell, always: true })) : [];
+  if (_spellSearch) oathPrepared = oathPrepared.filter(x => (x.spell.name || '').toLowerCase().includes(_spellSearch) || (x.spell.school || '').toLowerCase().includes(_spellSearch));
+  const all = [...userPrepared, ...oathPrepared];
   all.sort((a, b) => {
     const da = spellLevelToNum(a.spell.level) - spellLevelToNum(b.spell.level);
     return da !== 0 ? da : a.spell.name.localeCompare(b.spell.name);
@@ -9047,6 +9215,72 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeCastPopover();
 });
 
+// Divine Smite damage per the 2024 PHB: 2d8 Radiant, +1d8 for each spell slot
+// level above 1st, +1d8 more if the target is a Fiend or Undead (that bonus
+// die isn't affected by slot level). Paladin slots only go to 5th, so this
+// naturally tops out at 6d8 (+1d8 vs Fiend/Undead = 7d8) — no separate cap needed.
+function divineSmiteDice(slotLevel) {
+  return 2 + (slotLevel - 1);
+}
+
+// Divine Smite — spend a paladin spell slot (any level with slots remaining)
+// on a melee hit. Reuses the #cast-popover UI so the player never has to open
+// a rulebook to find the damage-scaling table.
+function openDivineSmitePopover(anchor) {
+  if (IS_DM) return;
+  const pop = document.getElementById('cast-popover');
+  pop.innerHTML = '';
+
+  const title = document.createElement('div');
+  title.className = 'cast-popover-title';
+  title.textContent = 'Divine Smite — spend a slot';
+  pop.appendChild(title);
+
+  const { p } = classBreakdown(state.level);
+  const palData = p > 0 ? CLASS_DATA.paladin.perLevel[p] : null;
+  const slotLevels = (palData && palData.spellSlots) ? Object.keys(palData.spellSlots).map(Number).sort((a, b) => a - b) : [];
+  const used = state.paladinSlotsUsed || {};
+  const usable = slotLevels.filter(lvl => (palData.spellSlots[lvl] || 0) - (used[lvl] || 0) > 0);
+
+  if (usable.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'cast-popover-empty';
+    empty.textContent = 'No spell slots available';
+    pop.appendChild(empty);
+  } else {
+    for (const lvl of usable) {
+      const max = palData.spellSlots[lvl];
+      const remaining = max - (used[lvl] || 0);
+      const dice = divineSmiteDice(lvl);
+      const opt = document.createElement('button');
+      opt.className = 'cast-popover-option';
+      opt.innerHTML = `<span>${ordinalSpellLevel(lvl)} slot — ${dice}d8 Radiant (${dice + 1}d8 vs Fiend/Undead)</span><span class="tier-count">×${remaining}</span>`;
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.paladinSlotsUsed = state.paladinSlotsUsed || {};
+        state.paladinSlotsUsed[lvl] = (state.paladinSlotsUsed[lvl] || 0) + 1;
+        saveState();
+        closeCastPopover();
+        render();
+        showInfo('Divine Smite!', `<p>Spent a <strong>${ordinalSpellLevel(lvl)}-level</strong> spell slot.</p><p>The target takes an extra <strong>${dice}d8 Radiant damage</strong> — <strong>${dice + 1}d8</strong> instead if it's a Fiend or Undead.</p>`);
+      });
+      pop.appendChild(opt);
+    }
+  }
+
+  pop.hidden = false;
+  const rect = anchor.getBoundingClientRect();
+  const popWidth = pop.offsetWidth;
+  let leftPx = rect.left;
+  if (leftPx + popWidth > window.innerWidth - 12) {
+    leftPx = Math.max(12, window.innerWidth - popWidth - 12);
+  }
+  pop.style.left = leftPx + 'px';
+  pop.style.top = (rect.bottom + 6) + 'px';
+
+  setTimeout(() => document.addEventListener('click', closeOnOutsideClick), 0);
+}
+
 function renderClassFeatures(level) {
   const container = document.getElementById('class-features');
   container.innerHTML = '';
@@ -9885,25 +10119,43 @@ function getKnownCantrips() {
 }
 
 // Lookup a spell by name across the base SPELLS list AND any subclass-expanded
-// lists (e.g., Genie + kind-specific). Returns SPELLS-shape object or null.
+// lists (e.g., Warlock Genie + kind-specific, Paladin Sacred Oath spells).
+// Returns SPELLS-shape object or null.
 function findSpellByName(name) {
   const base = SPELLS.find(s => s.name === name);
   if (base) return base;
-  // Walk subclass expanded lists for the chosen Warlock subclass
-  const sub = findChosenSubclass('warlock');
-  if (!sub) return null;
-  const cls = CLASS_DATA.warlock;
-  const subData = cls.subclassData && cls.subclassData[sub];
-  if (!subData || !subData.expandedSpells) return null;
-  for (const bucket of Object.keys(subData.expandedSpells)) {
-    for (const lvl of Object.keys(subData.expandedSpells[bucket])) {
-      const found = subData.expandedSpells[bucket][lvl].find(s => s.name === name);
-      if (found) {
-        return {
-          ...found,
-          level: ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'][parseInt(lvl, 10) - 1],
-          subclassExpanded: bucket === 'generic' ? 'Genie' : bucket
-        };
+  // Walk subclass expanded lists for the chosen Warlock subclass. Warlock's
+  // expandedSpells is keyed [bucket][spellLevel] -> list.
+  const wlSub = findChosenSubclass('warlock');
+  if (wlSub) {
+    const subData = CLASS_DATA.warlock.subclassData && CLASS_DATA.warlock.subclassData[wlSub];
+    if (subData && subData.expandedSpells) {
+      for (const bucket of Object.keys(subData.expandedSpells)) {
+        for (const lvl of Object.keys(subData.expandedSpells[bucket])) {
+          const found = subData.expandedSpells[bucket][lvl].find(s => s.name === name);
+          if (found) {
+            return {
+              ...found,
+              level: ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'][parseInt(lvl, 10) - 1],
+              subclassExpanded: bucket === 'generic' ? 'Genie' : bucket
+            };
+          }
+        }
+      }
+    }
+  }
+  // Walk the chosen Sacred Oath's expandedSpells. Paladin's expandedSpells is
+  // keyed [paladinClassLevel] -> list (each entry already carries its own
+  // spell `level`), unlike Warlock's shape above.
+  const oath = state.sacredOath || findChosenSubclass('paladin');
+  if (oath) {
+    const subData = CLASS_DATA.paladin.subclassData && CLASS_DATA.paladin.subclassData[oath];
+    if (subData && subData.expandedSpells) {
+      for (const key of Object.keys(subData.expandedSpells)) {
+        const found = subData.expandedSpells[key].find(s => s.name === name);
+        if (found) {
+          return { ...found, oathSpell: true, subclassExpanded: oath };
+        }
       }
     }
   }
@@ -9962,6 +10214,33 @@ function getArmorerAlwaysPrepared(artificerLevel) {
   const out = [];
   for (let l = 1; l <= artificerLevel; l++) {
     if (ap[l]) out.push(...ap[l]);
+  }
+  return out;
+}
+
+// Paladin Oath Spells — always prepared per the 2024 PHB oath spell table, and
+// they do NOT count against the paladin's normal prepared-spell total. Unlike
+// Warlock's expandedSpells (keyed by *spell* level, optional picks that still
+// count against the total), Paladin's expandedSpells is keyed by the *paladin
+// class level* thresholds (3/5/9/13/17) at which each pair unlocks. Returns
+// full SPELLS-shape spell objects (resolved via findSpellByName) so callers
+// can render/cast them exactly like any other prepared spell.
+function getOathSpellsFor(paladinClassLevel) {
+  const oath = state.sacredOath || findChosenSubclass('paladin') || gatherPendingSubclassFromPicker();
+  if (!oath) return [];
+  const subData = CLASS_DATA.paladin.subclassData && CLASS_DATA.paladin.subclassData[oath];
+  if (!subData || !subData.expandedSpells) return [];
+  const out = [];
+  const seen = new Set();
+  for (const key of Object.keys(subData.expandedSpells)) {
+    const threshold = parseInt(key, 10);
+    if (threshold > paladinClassLevel) continue;
+    for (const entry of subData.expandedSpells[key]) {
+      if (seen.has(entry.name)) continue;
+      seen.add(entry.name);
+      const resolved = findSpellByName(entry.name);
+      out.push(resolved ? { ...resolved, oathSpell: true, subclassExpanded: oath } : { ...entry, oathSpell: true, subclassExpanded: oath });
+    }
   }
   return out;
 }
@@ -11527,7 +11806,9 @@ function openEditPrepared() {
   const prompts = document.getElementById('prepared-prompts');
   const subtitleSuffix = klass === 'warlock'
     ? ' Subclass-expanded spells (Genie / Efreeti) are eligible. House rule: RAW only allows 1 swap on level-up.'
-    : '';
+    : klass === 'paladin'
+      ? ' Your Sacred Oath spells are always prepared and don\'t count against this total — see below.'
+      : '';
   document.getElementById('prepared-subtitle').textContent =
     `Pick up to ${max} prepared ${CLASS_DATA[klass].name} spell${max > 1 ? 's' : ''} (up to ${ordinalSpellLevel(maxLvl)}).${subtitleSuffix}`;
 
@@ -11566,7 +11847,29 @@ function openEditPrepared() {
     return da !== 0 ? da : a.name.localeCompare(b.name);
   });
 
+  // Paladin Oath Spells: always prepared, don't count against the total above,
+  // and aren't a player choice — shown read-only so nobody has to hunt through
+  // a rulebook to remember what their oath auto-grants at this level.
+  const oathSpells = klass === 'paladin' ? getOathSpellsFor(classLevel) : [];
+  const oathLabel = (oathSpells[0] && oathSpells[0].subclassExpanded) || state.sacredOath || 'Sacred Oath';
+  const oathBlock = oathSpells.length > 0 ? `
+    <div class="modal-prompt">
+      <div class="modal-prompt-label">${oathLabel} Spells — always prepared <span style="font-weight:400;font-style:italic;">(don't count against the total)</span></div>
+      <div class="spell-picker" data-pick="oathAlways">
+        ${oathSpells.map(s => `
+          <label class="spell-pick disabled">
+            <input type="checkbox" checked disabled>
+            <span class="spell-pick-name">${s.name}${s.concentration ? ' <span class="conc-tag">C</span>' : ''} <span class="always-tag">auto</span></span>
+            <span class="spell-pick-meta">${s.level} · ${s.school || ''}</span>
+            <button type="button" class="picker-info" data-spell="${s.name}" title="Spell details">ⓘ</button>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
   prompts.innerHTML = `
+    ${oathBlock}
     <div class="modal-prompt">
       <div class="modal-prompt-label">Prepared spells</div>
       <div class="spell-picker" data-pick="prepared" data-max="${max}">
@@ -11583,8 +11886,10 @@ function openEditPrepared() {
     </div>
   `;
 
-  // Reuse spell picker wiring; bind confirm enable to local Save button
-  const picker = prompts.querySelector('.spell-picker');
+  // Reuse spell picker wiring; bind confirm enable to local Save button.
+  // Target the "prepared" picker specifically — the read-only oath-spells
+  // block above (if any) is also a .spell-picker but isn't part of the count.
+  const picker = prompts.querySelector('.spell-picker[data-pick="prepared"]');
   const countEl = prompts.querySelector('[data-count-for="prepared"]');
   const checkboxes = Array.from(picker.querySelectorAll('input[type="checkbox"]'));
   const saveBtn = document.getElementById('prepared-confirm');
@@ -12287,6 +12592,8 @@ document.getElementById('long-rest-btn').addEventListener('click', () => {
     state.paladinSlotsUsed = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     state.paladinsSmiteUsed = false;
     state.faithfulSteedUsed = false;
+    state.longstriderCastUsed = false;
+    state.passWithoutTraceCastUsed = false;
     state.oathCapstoneUsed = false;
     state.oathFeatureUses = {};
     state.bottledRespiteUsed = false;
